@@ -11,6 +11,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="icon" type="image/png" href="assets/logo.png" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
 <style>
   /* ============ DESIGN TOKENS ============ */
   :root {
@@ -23,7 +27,6 @@
     --ochre-soft: rgba(226, 125, 42, 0.08);
     --honey: #F2B53A;
     --espresso: #2B1D14;
-    --espresso-90: rgba(43, 29, 20, 0.9);
     --bark: #5C4A3D;
     --driftwood: #8B7A6B;
 
@@ -40,11 +43,28 @@
 
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
     --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Osmo Button 004 — themed */
+    --button-004-color: var(--cream);
+    --button-004-color-background: var(--ochre);
+    --button-004-color-focus: var(--honey);
+    --button-004-border-radius: 2.5em;
+    --button-004-padding: 0.85em 1.4em;
+    --button-004-translate-y: 1.25em;
+    --button-004-focus-inset: -0.125em;
+    --button-004-click-scale: 0.955 0.925;
+    --button-004-ease-hover: cubic-bezier(0.675, 0.15, 0.1, 1);
+    --button-004-ease-click: cubic-bezier(0.4, 0, 0.2, 1);
+    --button-004-ease-focus: cubic-bezier(0.32, 0.72, 0, 1);
   }
 
   /* ============ RESET ============ */
   *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; }
+  html.lenis, html.lenis body { height: auto; }
+  .lenis.lenis-smooth { scroll-behavior: auto !important; }
+  .lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+  .lenis.lenis-stopped { overflow: hidden; }
   body {
     margin: 0;
     font-family: var(--sans);
@@ -85,8 +105,6 @@
   h3 { font-size: clamp(22px, 2.4vw, 28px); }
   p { margin: 0; }
   em { font-style: italic; }
-
-  /* Italic emphasis with Ochre underline */
   .em-i {
     font-style: italic;
     position: relative;
@@ -117,129 +135,423 @@
   .section--dark .em-i { color: var(--honey); }
   .section--dark .em-i::after { display: none; }
 
-  /* ============ BUTTONS ============ */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 16px 28px;
+  /* ============ OSMO BUTTON 004 (verbatim, themed via vars) ============ */
+  .button-004 {
+    color: var(--button-004-color);
+    -webkit-user-select: none;
+    user-select: none;
+    background-color: #0000;
+    outline-style: none;
+    padding: 0;
+    line-height: 1;
+    text-decoration: none;
+    display: inline-grid;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+    transition: scale 0.15s var(--button-004-ease-click);
     font-family: var(--sans);
     font-size: 14px;
     font-weight: 500;
     letter-spacing: 0.01em;
-    border-radius: var(--radius-sm);
-    transition: all 220ms var(--ease);
-    cursor: pointer;
-    white-space: nowrap;
   }
-  .btn--primary {
-    background: var(--ochre);
-    color: var(--cream);
+  .button-004::after {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: var(--button-004-focus-inset);
+    border-radius: var(--button-004-border-radius);
+    transition: box-shadow 0.3s var(--button-004-ease-focus);
+    pointer-events: none;
+    z-index: 1;
   }
-  .btn--primary:hover { background: var(--ochre-deep); transform: translateY(-1px); }
-  .btn--secondary {
-    background: transparent;
-    color: var(--espresso);
-    border: 1px solid var(--espresso);
+  .button-004:is(:focus-visible)::after { box-shadow: 0 0 0 0.125em var(--button-004-color-focus); }
+  .button-004:active { scale: var(--button-004-click-scale); }
+  .button-004__inner {
+    pointer-events: none;
+    border-radius: var(--button-004-border-radius);
+    z-index: 1;
+    padding: var(--button-004-padding);
+    grid-area: 1 / 1;
+    display: grid;
   }
-  .btn--secondary:hover { background: var(--espresso); color: var(--cream); }
-  .btn--ghost {
-    color: var(--espresso);
-    padding: 10px 0;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    text-underline-offset: 4px;
-    transition: text-decoration-color 220ms var(--ease);
+  .button-004__text {
+    perspective: 10em;
+    transform-style: preserve-3d;
+    grid-area: 1 / 1;
   }
-  .btn--ghost:hover { text-decoration-color: var(--ochre); }
-  .btn--large { padding: 20px 36px; font-size: 15px; }
-  .section--dark .btn--secondary {
-    color: var(--cream);
-    border-color: var(--cream);
+  .button-004__text .button-004__split-char {
+    --base-delay: 0.05s;
+    --max-extra: 2.9s;
+    --t: calc(var(--index) / max(var(--max-index), 1));
+    --curve: sin(calc(var(--t) * 1.5deg));
+    --delay: calc(var(--base-delay) + (var(--curve) * var(--max-extra)));
+    --rot-t: calc(var(--index) / max(var(--max-index), 1));
+    --rot-curve: sin(calc(var(--rot-t) * 30deg));
+    --rot-sign: clamp(-1, var(--signed-index), 1);
+    --rot-max: 36deg;
+    display: inline-block;
   }
-  .section--dark .btn--secondary:hover { background: var(--cream); color: var(--espresso); }
+  .button-004__text.is--default .button-004__split-char {
+    transition: transform 0.325s var(--button-004-ease-hover), translate 0.425s var(--button-004-ease-hover), rotate 0.45s var(--button-004-ease-hover), opacity 0.15s ease-out;
+  }
+  .button-004__text.is--hover .button-004__split-char {
+    transition: transform 0.35s var(--button-004-ease-hover), translate 0.35s var(--button-004-ease-hover), rotate 0.35s var(--button-004-ease-hover), opacity 0.15s 0.1s ease-out;
+    rotate: 1 0 0 -72deg;
+    transform: rotateZ(calc(var(--rot-sign) * var(--rot-curve) * var(--rot-max) * -1)) scale(0.65);
+    translate: calc(var(--signed-index) * 0.125em) calc(var(--button-004-translate-y) * 1) 0;
+    opacity: 0;
+  }
+  .button-004__bg {
+    background-color: var(--button-004-color-background);
+    border-radius: var(--button-004-border-radius);
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .button-004__text .button-004__split-char { will-change: transform, translate, rotate, opacity; }
+    .button-004:is(:hover, :focus-visible) .button-004__text.is--default .button-004__split-char,
+    [data-hover]:is(:hover, :focus-visible) .button-004 .button-004__text.is--default .button-004__split-char {
+      translate: calc(var(--signed-index) * 0.125em) calc(var(--button-004-translate-y) * -1) 0;
+      rotate: 1 0 0 72deg;
+      transform: rotateZ(calc(var(--rot-sign) * var(--rot-curve) * var(--rot-max) * -1)) scale(0.65);
+      opacity: 0;
+      transition: transform 0.35s var(--delay) var(--button-004-ease-hover), translate 0.35s var(--delay) var(--button-004-ease-hover), rotate 0.35s var(--delay) var(--button-004-ease-hover), opacity 0.15s calc(var(--delay) + 0.1s) ease-out;
+    }
+    .button-004:is(:hover, :focus-visible) .button-004__text.is--hover .button-004__split-char,
+    [data-hover]:is(:hover, :focus-visible) .button-004 .button-004__text.is--hover .button-004__split-char {
+      translate: 0 0 0;
+      rotate: 1 0 0 0deg;
+      transform: rotateZ(0deg) scale(1);
+      opacity: 1;
+      transition: transform 0.325s calc(var(--delay) + 0.05s) var(--button-004-ease-hover), translate 0.425s calc(var(--delay) + 0.05s) var(--button-004-ease-hover), rotate 0.45s calc(var(--delay) + 0.05s) var(--button-004-ease-hover), opacity 0.15s calc(var(--delay) + 0.075s) ease-out;
+    }
+  }
+  /* Button 004 variants */
+  .button-004[data-variant="secondary"] {
+    --button-004-color: var(--espresso);
+    --button-004-color-background: var(--sand);
+    --button-004-color-focus: var(--espresso);
+  }
+  .button-004[data-variant="ghost"] {
+    --button-004-color: var(--espresso);
+    --button-004-color-background: transparent;
+  }
+  .button-004[data-variant="ghost"] .button-004__bg {
+    box-shadow: inset 0 0 0 1.5px var(--espresso);
+  }
+  .button-004[data-variant="dark"] {
+    --button-004-color: var(--cream);
+    --button-004-color-background: var(--ochre);
+    --button-004-color-focus: var(--honey);
+  }
+  .button-004[data-size="large"] {
+    font-size: 15px;
+    --button-004-padding: 1em 1.6em;
+  }
+  .button-004[data-size="block"] {
+    width: 100%;
+  }
+  .button-004[data-size="block"] .button-004__inner,
+  .button-004[data-size="block"] .button-004__bg {
+    justify-content: center;
+  }
+  .button-004[data-size="block"] .button-004__inner {
+    justify-items: center;
+  }
 
-  /* ============ NAV ============ */
-  .nav {
+  /* ============ OSMO MEGA NAV (verbatim, themed) ============ */
+  [data-menu-wrap] { --nav-height: 4em; }
+  .mega-nav {
+    z-index: 100;
     position: fixed;
-    top: 0;
+    top: 1.25em;
+    left: 1.25em;
+    right: 1.25em;
+    font-family: var(--sans);
+  }
+  .mega-nav__bar {
+    z-index: 3;
+    background-color: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 0.75em;
+    width: 100%;
+    max-width: 80em;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    box-shadow: 0 8px 24px -16px rgba(43, 29, 20, 0.16);
+  }
+  .mega-nav__container {
+    height: var(--nav-height);
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 1.5em;
+    display: flex;
+  }
+  .mega-nav__bar-start {
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    display: flex;
+    position: relative;
+  }
+  .mega-nav__bar-logo {
+    flex: none;
+    width: 8em;
+    margin-right: 2.5em;
+    display: flex;
+  }
+  .mega-nav__bar-logo img { width: 100%; height: auto; }
+  .mega-nav__bar-list {
+    grid-column-gap: 0.5em;
+    grid-row-gap: 0.5em;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+  }
+  .mega-nav__bar-list.is--actions { margin-left: auto; }
+  .mega-nav__bar-link {
+    color: var(--bark);
+    background-color: #0000;
+    border-radius: 0.5em;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0.5em 0.75em;
+    text-decoration: none;
+    display: flex;
+    transition: color 200ms var(--ease), background-color 200ms var(--ease);
+  }
+  .mega-nav__bar-link:hover { color: var(--espresso); background-color: var(--cream); }
+  .mega-nav__bar-link-label { font-size: 0.9375em; font-weight: 500; line-height: 1.2; }
+  .mega-nav__bar-link-icon { width: 1.25em; height: 1.25em; margin-left: 0.25em; transition: transform 200ms var(--ease); }
+  .mega-nav__bar-link[aria-expanded="true"] .mega-nav__bar-link-icon.is--dropdown { transform: rotate(180deg); }
+  .mega-nav__bar-end {
+    grid-column-gap: 0.75em;
+    grid-row-gap: 0.75em;
+    justify-content: flex-end;
+    align-items: center;
+    display: none;
+  }
+  .mega-nav__bar-action { display: flex; align-items: center; }
+  .mega-nav__bar-inner {
+    grid-column-gap: 0.75em;
+    grid-row-gap: 0.75em;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 0;
+    padding-left: 0;
+    list-style: none;
+    display: flex;
+  }
+  .mega-nav__bar-inner.is--actions { margin-left: auto; }
+  .mega-nav__burger {
+    grid-column-gap: 0.2em;
+    grid-row-gap: 0.2em;
+    background-color: var(--cream);
+    border-radius: 0.5em;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    width: 2.5em;
+    height: 2.5em;
+    padding: 0;
+    display: flex;
+    border: 1px solid var(--sand);
+  }
+  .mega-nav__burger-line {
+    z-index: 1;
+    background-color: var(--espresso);
+    border-radius: 0.125em;
+    flex: none;
+    width: 1.25em;
+    height: 0.125em;
+    padding: 0;
+    display: block;
+    position: relative;
+  }
+  .mega-nav__back {
+    z-index: 2;
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    left: -0.625em;
+  }
+  .mega-nav__backdrop {
+    z-index: 0;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    background-color: rgba(43, 29, 20, 0.32);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    position: fixed;
+    inset: 0%;
+  }
+  .mega-nav__dropdown-wrapper {
+    z-index: 2;
+    pointer-events: none;
+    width: 100%;
+    max-width: 80em;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    top: calc(100% - 0.5em);
     left: 0;
     right: 0;
-    z-index: 100;
-    padding: 18px 0;
-    transition: background 280ms var(--ease), backdrop-filter 280ms var(--ease), border-color 280ms var(--ease);
-    border-bottom: 1px solid transparent;
   }
-  .nav--scrolled {
-    background: rgba(250, 245, 235, 0.85);
-    backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
-    border-bottom-color: var(--sand);
+  .mega-nav__dropdown-container { position: relative; overflow: hidden; }
+  .mega-nav__dropdown-bg {
+    will-change: transform;
+    background-color: var(--paper);
+    border: 1px solid var(--sand);
+    border-top: none;
+    border-bottom-right-radius: 0.75em;
+    border-bottom-left-radius: 0.75em;
+    position: absolute;
+    inset: 0;
+    box-shadow: 0 12px 32px -16px rgba(43, 29, 20, 0.18);
   }
-  .nav__inner {
+  .mega-nav__dropdown-panel {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    position: absolute;
+    inset: 0 0 auto;
+    overflow: hidden;
+  }
+  .mega-nav__dropdown-inner { display: flex; }
+  .mega-nav__panel-col {
+    grid-column-gap: 1.25em;
+    grid-row-gap: 1.25em;
+    border-right: 1px solid var(--sand);
+    flex-flow: column;
+    flex: 1;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 2.5em 1.75em;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
   }
-  .nav__brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--serif);
-    font-size: 22px;
-    color: var(--espresso);
-  }
-  .nav__brand img { height: 32px; width: auto; }
-  .nav__brand-mark {
-    height: 32px;
-    width: 32px;
-    background: var(--espresso);
-    color: var(--cream);
-    display: grid;
-    place-items: center;
-    font-family: var(--serif);
-    font-size: 18px;
-    border-radius: 50%;
+  .mega-nav__panel-col:last-of-type { border: none; }
+  .mega-nav__panel-col.is--colored { background-color: var(--cream); }
+  .mega-nav__panel-col.is--colored.has--card { padding-top: 1.5em; padding-bottom: 1.5em; }
+  .mega-nav__panel-label {
+    text-transform: uppercase;
+    padding-left: 1em;
+    font-family: var(--sans);
+    font-size: 0.6875em;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    color: var(--driftwood);
     line-height: 1;
   }
-  .nav__links {
+  .mega-nav__panel-list {
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    width: 100%;
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
     display: flex;
-    gap: 36px;
-    font-size: 14px;
-    color: var(--bark);
   }
-  .nav__links a {
+  .mega-nav__panel-link {
+    color: var(--espresso);
+    border-radius: 0.5em;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 0.625em 0.75em;
+    text-decoration: none;
+    display: flex;
+    transition: background-color 180ms var(--ease);
+  }
+  .mega-nav__panel-link:hover { background-color: var(--cream); }
+  .mega-nav__panel-col.is--colored .mega-nav__panel-link:hover { background-color: var(--paper); }
+  .mega-nav__panel-link-text { font-weight: 500; font-size: 0.95em; }
+  .mega-nav__panel-link-desc { opacity: 0.7; font-size: 0.85em; font-weight: 400; margin-top: 2px; color: var(--bark); }
+  .mega-nav__card {
+    background-color: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 0.75em;
+    flex-flow: column;
+    width: 100%;
+    display: flex;
+    overflow: hidden;
+  }
+  .mega-nav__card-visual {
+    width: 100%;
+    aspect-ratio: 16 / 10;
     position: relative;
-    padding: 6px 0;
-    transition: color 200ms var(--ease);
+    background:
+      radial-gradient(circle at 70% 30%, var(--honey) 0%, transparent 60%),
+      radial-gradient(circle at 30% 70%, var(--ochre) 0%, transparent 55%),
+      var(--espresso);
   }
-  .nav__links a:hover { color: var(--espresso); }
-  .nav__links a.is-active { color: var(--espresso); }
-  .nav__links a.is-active::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 2px;
-    background: var(--ochre);
-    border-radius: 1px;
+  .mega-nav__card-content {
+    grid-column-gap: 1.25em;
+    grid-row-gap: 1.25em;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 1.25em;
+    display: flex;
   }
-  .nav__cta { display: flex; align-items: center; gap: 24px; font-size: 14px; }
-  .nav__login { color: var(--bark); transition: color 200ms var(--ease); }
-  .nav__login:hover { color: var(--espresso); }
-  @media (max-width: 880px) {
-    .nav__links { display: none; }
-    .nav__login { display: none; }
+  .mega-nav__card-text { flex-flow: column; display: flex; }
+  .mega-nav__card-cta {
+    color: var(--cream);
+    background-color: var(--ochre);
+    border-radius: 0.5em;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em 0.75em;
+    text-decoration: none;
+    display: flex;
+    transition: background-color 200ms var(--ease);
+  }
+  .mega-nav__card-cta:hover { background-color: var(--ochre-deep); }
+  .mega-nav__card-cta-label { font-size: 0.9375em; font-weight: 500; line-height: 1.2; }
+  .mega-nav__card-cta-icon { width: 1.25em; }
+
+  @media screen and (max-width: 991px) {
+    .mega-nav { top: 0; left: 0; right: 0; }
+    .mega-nav__bar { border-radius: 0; box-shadow: none; }
+    .mega-nav__bar-start { justify-content: space-between; align-items: center; }
+    .mega-nav__bar-list { flex-flow: column; justify-content: flex-start; align-items: stretch; width: 100%; }
+    .mega-nav__bar-list.is--actions { flex-flow: row; justify-content: space-between; align-items: stretch; gap: 1em; }
+    .mega-nav__bar-link { border-bottom: 1px solid var(--sand); border-radius: 0; width: 100%; padding: 0.75em 0; font-size: 1.25em; }
+    .mega-nav__bar-link.is--dropdown { justify-content: space-between; align-items: center; }
+    .mega-nav__bar-link.is--back { border-bottom-style: none; font-size: 1em; }
+    .mega-nav__bar-link-icon { width: 1.5em; height: 1.5em; }
+    .mega-nav__bar-link-icon.is--dropdown { transform: rotate(-90deg); }
+    .mega-nav__bar-end { display: flex; }
+    .mega-nav__bar-inner {
+      opacity: 0; bottom: 0; left: 0; right: 0; top: var(--nav-height);
+      visibility: hidden; background-color: var(--cream);
+      flex-flow: column; justify-content: space-between; align-items: center;
+      padding: 2em 1.5em; position: fixed; overflow: auto;
+    }
+    .mega-nav__backdrop { display: none; }
+    .mega-nav__dropdown-wrapper { z-index: 4; bottom: 0; top: var(--nav-height); position: fixed; }
+    .mega-nav__dropdown-container { height: 100%; overflow: auto; }
+    .mega-nav__dropdown-bg { display: none; }
+    .mega-nav__dropdown-panel { background-color: var(--cream); bottom: 0; overflow: auto; }
+    .mega-nav__dropdown-inner { flex-flow: column; }
+    .mega-nav__panel-col { border-bottom: 1px solid var(--sand); border-right-style: none; padding-top: 1.5em; padding-bottom: 1.5em; }
+    .mega-nav__panel-label { width: 100%; }
+    .mega-nav__bar-action { flex: 1; }
   }
 
   /* ============ HERO ============ */
   .hero {
-    padding: 200px 0 120px;
+    padding: 200px 0 32px;
     text-align: center;
     position: relative;
-    overflow: hidden;
   }
   .hero__eyebrow { margin-bottom: 32px; }
   .hero__title { max-width: 1000px; margin: 0 auto 28px; }
@@ -250,21 +562,153 @@
     line-height: 1.55;
     color: var(--bark);
   }
-  .hero__cta { display: inline-flex; gap: 16px; }
-  .hero__divider {
-    margin-top: 96px;
-    color: var(--driftwood);
-    font-size: 13px;
-    font-family: var(--serif);
-    font-style: italic;
-  }
+  .hero__cta { display: inline-flex; gap: 16px; align-items: center; }
   @media (max-width: 640px) {
-    .hero { padding: 140px 0 80px; }
+    .hero { padding: 140px 0 24px; }
     .hero__cta { flex-direction: column; align-items: stretch; max-width: 280px; margin: 0 auto; }
   }
 
+  /* Hero image (full-container width, parallax target) */
+  .hero-image {
+    margin: 80px auto 0;
+    width: 100%;
+    max-width: var(--container);
+    padding: 0 32px;
+    position: relative;
+  }
+  .hero-image__frame {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid var(--sand);
+    background: var(--paper);
+    box-shadow: 0 32px 64px -32px rgba(43, 29, 20, 0.2), 0 0 0 1px rgba(43, 29, 20, 0.04);
+    will-change: transform;
+  }
+  .hero-image__inner {
+    position: absolute;
+    inset: -10%;
+    will-change: transform;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Mocked product preview */
+  .hi-chrome {
+    height: 38px;
+    background: var(--cream);
+    border-bottom: 1px solid var(--sand);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .hi-dot { width: 11px; height: 11px; border-radius: 50%; }
+  .hi-dot:nth-child(1) { background: #E96B5A; }
+  .hi-dot:nth-child(2) { background: #F2B53A; }
+  .hi-dot:nth-child(3) { background: #7FA56A; }
+  .hi-url {
+    margin-left: 24px;
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 6px;
+    padding: 5px 14px;
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--driftwood);
+    letter-spacing: 0.02em;
+  }
+  .hi-body {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    background: var(--paper);
+    min-height: 0;
+  }
+  .hi-side {
+    background: var(--cream);
+    padding: 28px 20px;
+    border-right: 1px solid var(--sand);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .hi-brand {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--espresso);
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--sand);
+  }
+  .hi-navlist { display: flex; flex-direction: column; gap: 4px; }
+  .hi-navitem {
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--bark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .hi-navitem.is--active { background: var(--ochre); color: var(--cream); }
+  .hi-navitem .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; opacity: 0.6; }
+  .hi-main { padding: 32px 36px; display: flex; flex-direction: column; gap: 24px; min-height: 0; overflow: hidden; }
+  .hi-toolbar { display: flex; align-items: center; justify-content: space-between; }
+  .hi-title { font-family: var(--serif); font-size: 26px; color: var(--espresso); }
+  .hi-pillrow { display: flex; gap: 8px; }
+  .hi-pill { padding: 6px 12px; background: var(--cream); border-radius: 100px; font-size: 11px; color: var(--bark); font-weight: 500; }
+  .hi-pill.is--ochre { background: var(--ochre); color: var(--cream); }
+  .hi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .hi-card {
+    background: var(--cream);
+    border: 1px solid var(--sand);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .hi-card.is--ochre { background: var(--ochre); color: var(--cream); border-color: var(--ochre-deep); }
+  .hi-card .l { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; }
+  .hi-card .v { font-family: var(--serif); font-size: 32px; line-height: 1; }
+  .hi-card .d { font-size: 11px; opacity: 0.75; }
+  .hi-table {
+    border: 1px solid var(--sand);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--paper);
+  }
+  .hi-trow {
+    display: grid;
+    grid-template-columns: 1fr 80px 90px 80px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--sand);
+    font-size: 12px;
+    align-items: center;
+    gap: 12px;
+  }
+  .hi-trow:last-child { border-bottom: none; }
+  .hi-trow.is--head { background: var(--cream); font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--driftwood); }
+  .hi-name { color: var(--espresso); font-weight: 500; }
+  .hi-time { color: var(--bark); }
+  .hi-status { display: inline-block; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 500; }
+  .hi-status.is--confirmed { background: var(--ochre-soft); color: var(--ochre-deep); }
+  .hi-status.is--pending { background: var(--sand); color: var(--bark); }
+  .hi-time-large { font-family: var(--serif); font-size: 16px; color: var(--espresso); }
+
+  @media (max-width: 880px) {
+    .hi-body { grid-template-columns: 1fr; }
+    .hi-side { display: none; }
+    .hi-grid { grid-template-columns: 1fr 1fr; }
+    .hi-main { padding: 20px; }
+    .hero-image { padding: 0 16px; }
+  }
+
   /* ============ PRICING CARDS ============ */
-  .pricing { padding: 32px 0 120px; }
+  .pricing { padding: 160px 0 120px; }
   .pricing__grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -288,11 +732,7 @@
     transform: translateY(-4px);
     box-shadow: 0 20px 40px -20px rgba(43, 29, 20, 0.18);
   }
-  .plan--featured {
-    border-color: var(--ochre);
-    border-width: 2px;
-    padding-top: 44px;
-  }
+  .plan--featured { border-color: var(--ochre); border-width: 2px; padding-top: 44px; }
   .plan__pill {
     position: absolute;
     top: -16px;
@@ -310,172 +750,40 @@
     box-shadow: 0 4px 12px -4px rgba(43, 29, 20, 0.18);
     white-space: nowrap;
   }
-  .plan__name {
-    font-family: var(--sans);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--driftwood);
-    margin-bottom: 14px;
-  }
-  .plan__tier {
-    font-family: var(--serif);
-    font-size: 32px;
-    line-height: 1;
-    color: var(--espresso);
-    margin-bottom: 14px;
-  }
-  .plan__positioning {
-    font-size: 14px;
-    line-height: 1.55;
-    color: var(--bark);
-    min-height: 64px;
-    margin-bottom: 28px;
-  }
-  .plan__price {
-    font-family: var(--serif);
-    font-size: 52px;
-    line-height: 1;
-    color: var(--espresso);
-    margin-bottom: 4px;
-    letter-spacing: -0.01em;
-  }
-  .plan__price-note {
-    font-size: 12px;
-    color: var(--driftwood);
-    margin-bottom: 28px;
-  }
-  .plan__cta { width: 100%; justify-content: center; margin-bottom: 28px; }
+  .plan__name { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--driftwood); margin-bottom: 14px; }
+  .plan__tier { font-family: var(--serif); font-size: 32px; line-height: 1; color: var(--espresso); margin-bottom: 14px; }
+  .plan__positioning { font-size: 14px; line-height: 1.55; color: var(--bark); min-height: 64px; margin-bottom: 28px; }
+  .plan__price { font-family: var(--serif); font-size: 52px; line-height: 1; color: var(--espresso); margin-bottom: 4px; letter-spacing: -0.01em; }
+  .plan__price-note { font-size: 12px; color: var(--driftwood); margin-bottom: 28px; }
+  .plan__cta { margin-bottom: 28px; }
   .plan__features { list-style: none; padding: 0; margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--bark); }
-  .plan__features li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 8px 0;
-  }
-  .plan__features-prefix {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--driftwood);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 8px 0 12px;
-    border-top: 1px solid var(--sand);
-    margin-top: 8px;
-  }
-  .plan__check {
-    flex-shrink: 0;
-    width: 14px;
-    height: 14px;
-    margin-top: 4px;
-    color: var(--ochre);
-  }
-  .plan__custom-note {
-    text-align: center;
-    margin-top: 32px;
-    font-size: 14px;
-    color: var(--driftwood);
-  }
+  .plan__features li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; }
+  .plan__features-prefix { font-size: 12px; font-weight: 500; color: var(--driftwood); text-transform: uppercase; letter-spacing: 0.06em; padding: 8px 0 12px; border-top: 1px solid var(--sand); margin-top: 8px; }
+  .plan__check { flex-shrink: 0; width: 14px; height: 14px; margin-top: 4px; color: var(--ochre); }
+  .plan__custom-note { text-align: center; margin-top: 32px; font-size: 14px; color: var(--driftwood); }
   .plan__custom-note a { color: var(--espresso); border-bottom: 1px solid var(--ochre); padding-bottom: 1px; transition: color 200ms var(--ease); }
   .plan__custom-note a:hover { color: var(--ochre); }
 
   /* ============ INCLUDED BAND ============ */
-  .included-band {
-    padding: 56px 0;
-    text-align: center;
-    background: var(--sand);
-  }
-  .included-band__title {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: clamp(24px, 3vw, 32px);
-    color: var(--espresso);
-    line-height: 1.25;
-    margin-bottom: 12px;
-  }
-  .included-band__sub {
-    font-size: 14px;
-    color: var(--bark);
-    max-width: 720px;
-    margin: 0 auto;
-  }
+  .included-band { padding: 56px 0; text-align: center; background: var(--sand); }
+  .included-band__title { font-family: var(--serif); font-style: italic; font-size: clamp(24px, 3vw, 32px); color: var(--espresso); line-height: 1.25; margin-bottom: 12px; }
+  .included-band__sub { font-size: 14px; color: var(--bark); max-width: 720px; margin: 0 auto; }
 
   /* ============ COMPARISON TABLE ============ */
   .compare-head { text-align: center; margin-bottom: 64px; }
   .compare-head .eyebrow { margin-bottom: 18px; }
   .compare-head p { color: var(--driftwood); font-size: 17px; max-width: 540px; margin: 18px auto 0; }
-  .compare-wrap {
-    background: var(--paper);
-    border: 1px solid var(--sand);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    position: relative;
-  }
-  .compare-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    table-layout: fixed;
-  }
-  .compare-table th, .compare-table td {
-    padding: 18px 20px;
-    text-align: center;
-    vertical-align: middle;
-    border-bottom: 1px solid var(--sand);
-  }
-  .compare-table th:first-child, .compare-table td:first-child {
-    text-align: left;
-    color: var(--bark);
-    font-weight: 400;
-    width: 36%;
-  }
-  .compare-table thead th {
-    background: var(--paper);
-    font-family: var(--serif);
-    font-size: 20px;
-    color: var(--espresso);
-    font-weight: 400;
-    padding: 28px 20px 24px;
-    position: sticky;
-    top: 64px;
-    z-index: 2;
-  }
-  .compare-table thead th:first-child {
-    font-family: var(--sans);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--driftwood);
-  }
+  .compare-wrap { background: var(--paper); border: 1px solid var(--sand); border-radius: var(--radius-lg); overflow: hidden; position: relative; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; table-layout: fixed; }
+  .compare-table th, .compare-table td { padding: 18px 20px; text-align: center; vertical-align: middle; border-bottom: 1px solid var(--sand); }
+  .compare-table th:first-child, .compare-table td:first-child { text-align: left; color: var(--bark); font-weight: 400; width: 36%; }
+  .compare-table thead th { background: var(--paper); font-family: var(--serif); font-size: 20px; color: var(--espresso); font-weight: 400; padding: 28px 20px 24px; position: sticky; top: 96px; z-index: 2; }
+  .compare-table thead th:first-child { font-family: var(--sans); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--driftwood); }
   .compare-table thead th .col-name { display: block; line-height: 1; }
-  .compare-table thead th .col-mini {
-    display: block;
-    margin-top: 6px;
-    font-family: var(--sans);
-    font-size: 10px;
-    font-weight: 500;
-    color: var(--driftwood);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-  .compare-table .col-featured {
-    background: var(--ochre-soft);
-    border-left: 1px solid rgba(226, 125, 42, 0.18);
-    border-right: 1px solid rgba(226, 125, 42, 0.18);
-  }
+  .compare-table thead th .col-mini { display: block; margin-top: 6px; font-family: var(--sans); font-size: 10px; font-weight: 500; color: var(--driftwood); letter-spacing: 0.12em; text-transform: uppercase; }
+  .compare-table .col-featured { background: var(--ochre-soft); border-left: 1px solid rgba(226, 125, 42, 0.18); border-right: 1px solid rgba(226, 125, 42, 0.18); }
   .compare-table thead th.col-featured .col-mini { color: var(--ochre); }
-  .compare-table .group-row td {
-    background: var(--sand);
-    font-family: var(--sans);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--bark);
-    padding: 14px 20px;
-    text-align: left;
-  }
+  .compare-table .group-row td { background: var(--sand); font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--bark); padding: 14px 20px; text-align: left; }
   .compare-table tbody tr:nth-child(even of :not(.group-row)) td { background: rgba(237, 227, 210, 0.32); }
   .compare-table tbody tr:nth-child(even of :not(.group-row)) td.col-featured { background: rgba(226, 125, 42, 0.12); }
   .check { color: var(--ochre); display: inline-block; }
@@ -483,7 +791,6 @@
   .dash { color: var(--sand-muted); font-size: 18px; line-height: 1; }
   .cell-text { font-size: 12px; color: var(--bark); font-weight: 500; }
   .compare-table tbody tr:last-child td { border-bottom: none; }
-
   @media (max-width: 900px) {
     .compare-wrap { overflow-x: auto; }
     .compare-table { min-width: 760px; }
@@ -491,105 +798,140 @@
 
   /* ============ INCENTIVE ============ */
   .incentive { background: var(--espresso); color: var(--cream); }
-  .incentive__inner {
-    display: grid;
-    grid-template-columns: 1.1fr 1.4fr;
-    gap: 80px;
-    align-items: center;
-  }
-  .incentive__title {
-    font-family: var(--serif);
-    font-size: clamp(40px, 4.6vw, 56px);
-    line-height: 1.05;
-    color: var(--cream);
-    margin: 24px 0 24px;
-  }
+  .incentive__inner { display: grid; grid-template-columns: 1.1fr 1.4fr; gap: 80px; align-items: center; }
+  .incentive__title { font-family: var(--serif); font-size: clamp(40px, 4.6vw, 56px); line-height: 1.05; color: var(--cream); margin: 24px 0 24px; }
   .incentive__sub { color: var(--sand); font-size: 16px; line-height: 1.6; max-width: 380px; margin-bottom: 36px; }
   .incentive__bonuses { display: flex; flex-direction: column; gap: 16px; }
-  .bonus {
-    display: grid;
-    grid-template-columns: 140px 1fr;
-    gap: 28px;
-    align-items: center;
-    background: rgba(250, 245, 235, 0.04);
-    border: 1px solid rgba(250, 245, 235, 0.08);
-    border-radius: var(--radius);
-    padding: 24px 28px;
-    transition: border-color 240ms var(--ease), background 240ms var(--ease);
-  }
-  .bonus:hover {
-    border-color: rgba(242, 181, 58, 0.4);
-    background: rgba(250, 245, 235, 0.06);
-  }
-  .bonus__amount {
-    font-family: var(--serif);
-    font-size: 36px;
-    color: var(--cream);
-    line-height: 1;
-  }
+  .bonus { display: grid; grid-template-columns: 140px 1fr; gap: 28px; align-items: center; background: rgba(250, 245, 235, 0.04); border: 1px solid rgba(250, 245, 235, 0.08); border-radius: var(--radius); padding: 24px 28px; transition: border-color 240ms var(--ease), background 240ms var(--ease); }
+  .bonus:hover { border-color: rgba(242, 181, 58, 0.4); background: rgba(250, 245, 235, 0.06); }
+  .bonus__amount { font-family: var(--serif); font-size: 36px; color: var(--cream); line-height: 1; }
   .bonus__text { color: var(--sand); font-size: 14.5px; line-height: 1.55; }
   .bonus__text strong { color: var(--honey); font-weight: 500; font-style: italic; font-family: var(--serif); font-size: 18px; }
-  .incentive .btn--secondary { margin-top: 8px; }
+  .incentive__cta-wrap { margin-top: 8px; }
   @media (max-width: 960px) {
     .incentive__inner { grid-template-columns: 1fr; gap: 48px; }
     .bonus { grid-template-columns: 110px 1fr; }
   }
 
-  /* ============ SOCIAL PROOF ============ */
-  .social { padding: 120px 0 100px; text-align: center; }
-  .social__eyebrow { margin-bottom: 36px; }
-  .social__logos {
+  /* ============ SOCIAL PROOF (redesigned) ============ */
+  .social { padding: 140px 0 120px; }
+  .social__head { text-align: center; max-width: 760px; margin: 0 auto 64px; }
+  .social__head .eyebrow { margin-bottom: 18px; }
+  .social__head h2 { font-size: clamp(36px, 4.6vw, 52px); }
+
+  .stat-band {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 40px 48px;
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 20px;
+    margin-bottom: 80px;
+  }
+  .stat-band__item { text-align: center; }
+  .stat-band__num { font-family: var(--serif); font-size: clamp(44px, 4.5vw, 56px); line-height: 1; color: var(--espresso); letter-spacing: -0.01em; }
+  .stat-band__label { font-family: var(--sans); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--driftwood); margin-top: 10px; }
+  @media (max-width: 880px) {
+    .stat-band { grid-template-columns: repeat(2, 1fr); padding: 32px 24px; }
+  }
+
+  .logo-wall {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 24px;
-    align-items: center;
-    max-width: 1080px;
-    margin: 0 auto 80px;
-    opacity: 0.78;
+    gap: 0;
+    border-top: 1px solid var(--sand);
+    border-bottom: 1px solid var(--sand);
+    margin-bottom: 80px;
   }
-  .social__logos span {
+  .logo-wall__cell {
+    border-right: 1px solid var(--sand);
+    padding: 32px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     font-family: var(--sans);
     font-size: 13px;
     font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    letter-spacing: 0.08em;
     color: var(--bark);
-    text-align: center;
-    line-height: 1.3;
+    transition: background-color 280ms var(--ease), color 280ms var(--ease);
   }
-  @media (max-width: 900px) {
-    .social__logos { grid-template-columns: repeat(3, 1fr); gap: 32px 24px; }
-  }
-  .social__quote {
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: clamp(24px, 3vw, 32px);
-    line-height: 1.4;
-    color: var(--espresso);
-    max-width: 820px;
-    margin: 0 auto 24px;
-    position: relative;
-  }
-  .social__quote::before {
-    content: '“';
-    font-family: var(--serif);
-    font-size: 84px;
-    color: var(--ochre);
-    position: absolute;
-    top: -40px;
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0.5;
-    line-height: 1;
-  }
-  .social__attribution {
-    font-family: var(--sans);
-    font-size: 13px;
-    color: var(--driftwood);
-    letter-spacing: 0.04em;
+  .logo-wall__cell:hover { background-color: var(--paper); color: var(--espresso); }
+  .logo-wall__cell:last-child { border-right: none; }
+  .logo-wall__cell svg { width: 22px; height: 22px; color: var(--ochre); flex-shrink: 0; }
+  @media (max-width: 880px) {
+    .logo-wall { grid-template-columns: repeat(2, 1fr); }
+    .logo-wall__cell:nth-child(2n) { border-right: none; }
+    .logo-wall__cell:not(:last-child):not(:nth-last-child(2)) { border-bottom: 1px solid var(--sand); }
   }
 
-  /* ============ FAQ ============ */
+  .testimonial-card {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 24px;
+    padding: 56px;
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 48px;
+    align-items: center;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .testimonial-card__avatar {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 30%, var(--honey) 0%, transparent 55%),
+      radial-gradient(circle at 75% 70%, var(--ochre) 0%, transparent 60%),
+      var(--sand);
+    border: 1px solid var(--sand);
+    flex-shrink: 0;
+    position: relative;
+  }
+  .testimonial-card__avatar::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid var(--sand);
+    opacity: 0.6;
+  }
+  .testimonial-card__body { flex: 1; }
+  .testimonial-card__quote {
+    font-family: var(--serif);
+    font-size: clamp(22px, 2.4vw, 28px);
+    line-height: 1.4;
+    color: var(--espresso);
+    margin-bottom: 28px;
+  }
+  .testimonial-card__quote em { font-style: italic; }
+  .testimonial-card__attribution { display: flex; flex-direction: column; gap: 4px; }
+  .testimonial-card__name { font-family: var(--sans); font-size: 14px; font-weight: 600; color: var(--espresso); letter-spacing: 0.01em; }
+  .testimonial-card__role { font-family: var(--sans); font-size: 13px; color: var(--driftwood); }
+  .testimonial-card__link {
+    margin-top: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--espresso);
+    border-bottom: 1px solid var(--ochre);
+    padding-bottom: 2px;
+    transition: color 200ms var(--ease);
+    align-self: flex-start;
+  }
+  .testimonial-card__link:hover { color: var(--ochre); }
+  @media (max-width: 860px) {
+    .testimonial-card { grid-template-columns: 1fr; padding: 36px; text-align: center; gap: 28px; justify-items: center; }
+    .testimonial-card__avatar { width: 140px; height: 140px; }
+  }
+
+  /* ============ FAQ (custom accordion, 300ms grid-rows transition) ============ */
   .faq { background: var(--paper); }
   .faq__head { text-align: center; margin-bottom: 56px; }
   .faq__list {
@@ -600,12 +942,13 @@
     margin: 0 auto;
   }
   @media (max-width: 880px) { .faq__list { grid-template-columns: 1fr; } }
-  .faq__item {
-    border-bottom: 1px solid var(--sand);
+  .faq__item { border-bottom: 1px solid var(--sand); }
+  .faq__q {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
     padding: 24px 0;
-  }
-  .faq__item summary {
-    list-style: none;
     cursor: pointer;
     display: flex;
     align-items: flex-start;
@@ -618,20 +961,33 @@
     line-height: 1.4;
     transition: color 200ms var(--ease);
   }
-  .faq__item summary:hover { color: var(--ochre); }
-  .faq__item summary::-webkit-details-marker { display: none; }
-  .faq__item summary::after {
-    content: '+';
+  .faq__q:hover { color: var(--ochre); }
+  .faq__q-icon {
+    flex-shrink: 0;
     font-family: var(--serif);
     font-size: 26px;
     line-height: 1;
     color: var(--driftwood);
-    flex-shrink: 0;
-    transition: transform 280ms var(--ease), color 200ms var(--ease);
+    transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1), color 200ms var(--ease);
   }
-  .faq__item[open] summary::after { transform: rotate(45deg); color: var(--ochre); }
-  .faq__item p {
-    margin-top: 16px;
+  .faq__item[data-open="true"] .faq__q-icon {
+    transform: rotate(45deg);
+    color: var(--ochre);
+  }
+  .faq__a-wrap {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .faq__item[data-open="true"] .faq__a-wrap {
+    grid-template-rows: 1fr;
+  }
+  .faq__a {
+    overflow: hidden;
+    min-height: 0;
+  }
+  .faq__a p {
+    padding: 0 0 24px;
     font-size: 14.5px;
     line-height: 1.65;
     color: var(--bark);
@@ -641,127 +997,207 @@
   /* ============ FINAL CTA ============ */
   .final-cta { padding: 160px 0; text-align: center; background: var(--espresso); color: var(--cream); }
   .final-cta__eyebrow { color: var(--honey); margin-bottom: 28px; }
-  .final-cta__title {
-    font-family: var(--serif);
-    font-size: clamp(48px, 7vw, 84px);
-    line-height: 1.05;
-    color: var(--cream);
-    max-width: 920px;
-    margin: 0 auto 32px;
-    letter-spacing: -0.015em;
-  }
+  .final-cta__title { font-family: var(--serif); font-size: clamp(48px, 7vw, 84px); line-height: 1.05; color: var(--cream); max-width: 920px; margin: 0 auto 32px; letter-spacing: -0.015em; }
   .final-cta__title em { color: var(--honey); font-style: italic; }
-  .final-cta__sub {
-    font-size: 18px;
-    line-height: 1.55;
-    color: var(--sand);
-    max-width: 580px;
-    margin: 0 auto 48px;
-  }
-  .final-cta__note {
-    margin-top: 24px;
-    font-size: 13px;
-    color: var(--driftwood);
-    font-family: var(--serif);
-    font-style: italic;
-  }
+  .final-cta__sub { font-size: 18px; line-height: 1.55; color: var(--sand); max-width: 580px; margin: 0 auto 48px; }
+  .final-cta__note { margin-top: 24px; font-size: 13px; color: var(--driftwood); font-family: var(--serif); font-style: italic; }
 
   /* ============ FOOTER ============ */
-  .footer {
-    background: var(--espresso);
-    color: var(--sand);
-    padding: 64px 0 32px;
-    border-top: 1px solid rgba(250, 245, 235, 0.08);
-  }
-  .footer__inner {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-    gap: 48px;
-    margin-bottom: 56px;
-  }
+  .footer { background: var(--espresso); color: var(--sand); padding: 64px 0 32px; border-top: 1px solid rgba(250, 245, 235, 0.08); }
+  .footer__inner { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 56px; }
   @media (max-width: 880px) { .footer__inner { grid-template-columns: 1fr 1fr; gap: 40px; } }
   .footer__brand img { height: 28px; margin-bottom: 16px; filter: brightness(0) invert(1); opacity: 0.92; }
   .footer__brand p { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--sand); max-width: 280px; line-height: 1.5; }
-  .footer__col h4 {
-    font-family: var(--sans);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--honey);
-    margin: 0 0 18px;
-  }
+  .footer__col h4 { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--honey); margin: 0 0 18px; }
   .footer__col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
-  .footer__col a {
-    font-size: 13px;
-    color: var(--sand);
-    opacity: 0.78;
-    transition: opacity 200ms var(--ease), color 200ms var(--ease);
-  }
+  .footer__col a { font-size: 13px; color: var(--sand); opacity: 0.78; transition: opacity 200ms var(--ease), color 200ms var(--ease); }
   .footer__col a:hover { opacity: 1; color: var(--honey); }
-  .footer__bottom {
-    padding-top: 28px;
-    border-top: 1px solid rgba(250, 245, 235, 0.08);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    color: var(--driftwood);
-    gap: 24px;
-    flex-wrap: wrap;
-  }
+  .footer__bottom { padding-top: 28px; border-top: 1px solid rgba(250, 245, 235, 0.08); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--driftwood); gap: 24px; flex-wrap: wrap; }
   .footer__bottom span { letter-spacing: 0.04em; }
 
-  /* ============ REVEAL ON SCROLL ============ */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
-  }
-  .reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  /* ============ REVEAL ============ */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out); }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     .reveal { opacity: 1; transform: none; }
     html { scroll-behavior: auto; }
   }
 
-  /* ============ MARGIN MARKERS (editorial) ============ */
-  .section-num {
-    position: absolute;
-    top: 56px;
-    left: 32px;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 16px;
-    color: var(--driftwood);
-    letter-spacing: 0.04em;
-    opacity: 0.72;
-  }
+  /* Margin section markers */
+  .section-num { position: absolute; top: 56px; left: 32px; font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--driftwood); letter-spacing: 0.04em; opacity: 0.72; }
   @media (max-width: 1100px) { .section-num { display: none; } }
 </style>
 </head>
 <body>
 
-<!-- ============ NAV ============ -->
-<nav class="nav" id="nav">
-  <div class="container nav__inner">
-    <a class="nav__brand" href="#top">
-      <img src="assets/logo.png" alt="Novadontics" />
-    </a>
-    <div class="nav__links">
-      <a href="#">Software</a>
-      <a href="#">Customers</a>
-      <a href="#" class="is-active">Pricing</a>
-      <a href="#">Company</a>
-    </div>
-    <div class="nav__cta">
-      <a href="#" class="nav__login">Sign in</a>
-      <a href="#cta" class="btn btn--primary">Schedule a demo</a>
+<!-- ============ OSMO MEGA NAV (themed) ============ -->
+<nav data-menu-open="false" data-menu-wrap="" class="mega-nav">
+  <div class="mega-nav__bar">
+    <div class="mega-nav__container">
+      <div class="mega-nav__bar-start">
+        <a data-menu-logo="" href="#top" class="mega-nav__bar-logo">
+          <img src="assets/logo.png" alt="Novadontics" />
+        </a>
+        <div data-nav-list="" data-mobile-nav="" class="mega-nav__bar-inner">
+          <ul class="mega-nav__bar-list">
+            <li data-nav-list-item="">
+              <button data-dropdown-toggle="software" aria-expanded="false" aria-haspopup="true" class="mega-nav__bar-link is--dropdown">
+                <span class="mega-nav__bar-link-label">Software</span>
+                <svg class="mega-nav__bar-link-icon is--dropdown" xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 20 20" fill="none"><path d="M6.6665 8.3335L9.99984 11.6668L13.3332 8.3335" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </button>
+            </li>
+            <li data-nav-list-item="">
+              <button data-dropdown-toggle="customers" aria-expanded="false" aria-haspopup="true" class="mega-nav__bar-link is--dropdown">
+                <span class="mega-nav__bar-link-label">Customers</span>
+                <svg class="mega-nav__bar-link-icon is--dropdown" xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 20 20" fill="none"><path d="M6.6665 8.3335L9.99984 11.6668L13.3332 8.3335" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </button>
+            </li>
+            <li data-nav-list-item="">
+              <button data-dropdown-toggle="company" aria-expanded="false" aria-haspopup="true" class="mega-nav__bar-link is--dropdown">
+                <span class="mega-nav__bar-link-label">Company</span>
+                <svg class="mega-nav__bar-link-icon is--dropdown" xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 20 20" fill="none"><path d="M6.6665 8.3335L9.99984 11.6668L13.3332 8.3335" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </button>
+            </li>
+            <li data-nav-list-item="">
+              <a href="#" class="mega-nav__bar-link"><span class="mega-nav__bar-link-label">Pricing</span></a>
+            </li>
+          </ul>
+          <ul data-nav-list-item="" class="mega-nav__bar-list is--actions">
+            <li class="mega-nav__bar-action">
+              <a data-button-004="" data-variant="ghost" href="#" class="button-004">
+                <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">Sign in</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">Sign in</span></span>
+                <span class="button-004__bg"></span>
+              </a>
+            </li>
+            <li class="mega-nav__bar-action">
+              <a data-button-004="" href="#cta" class="button-004">
+                <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">Schedule a demo</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">Schedule a demo</span></span>
+                <span class="button-004__bg"></span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="mega-nav__bar-end">
+          <button data-burger-toggle="" aria-label="toggle menu" aria-expanded="false" class="mega-nav__burger">
+            <span data-burger-line="top" class="mega-nav__burger-line"></span>
+            <span data-burger-line="mid" class="mega-nav__burger-line"></span>
+            <span data-burger-line="bot" class="mega-nav__burger-line"></span>
+          </button>
+        </div>
+        <div data-mobile-back="" class="mega-nav__back">
+          <button aria-label="back to menu" class="mega-nav__bar-link is--back">
+            <svg class="mega-nav__bar-link-icon" xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 20 20" fill="none"><path d="M11.6665 6.6665L8.33317 9.99984L11.6665 13.3332" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            <span class="mega-nav__bar-link-label">Back</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div data-dropdown-wrapper="" class="mega-nav__dropdown-wrapper">
+    <div data-dropdown-container="" class="mega-nav__dropdown-container">
+      <div data-dropdown-bg="" class="mega-nav__dropdown-bg"></div>
+
+      <!-- SOFTWARE panel -->
+      <div data-panel-state="" data-nav-content="software" role="region" aria-label="software menu" class="mega-nav__dropdown-panel">
+        <div class="mega-nav__dropdown-inner">
+          <div data-menu-fade="" class="mega-nav__panel-col"><span data-menu-fade="" class="mega-nav__panel-label">Platform</span>
+            <ul class="mega-nav__panel-list">
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Practice management</span><span class="mega-nav__panel-link-desc">Scheduling, billing, records</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Patient engagement</span><span class="mega-nav__panel-link-desc">Texting, reminders, forms</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Clinical imaging</span><span class="mega-nav__panel-link-desc">Cloud-based, FDA-cleared</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Smart clinical notes</span><span class="mega-nav__panel-link-desc">Implant-specific templates</span></a></li>
+            </ul>
+          </div>
+          <div data-menu-fade="" class="mega-nav__panel-col"><span data-menu-fade="" class="mega-nav__panel-label">Specialty tools</span>
+            <ul class="mega-nav__panel-list">
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Implant logbook</span><span class="mega-nav__panel-link-desc">Track every procedure</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Continuing education</span><span class="mega-nav__panel-link-desc">300+ clinical videos</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Care Pulse app</span><span class="mega-nav__panel-link-desc">Patient self-booking</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Expert clinical support</span><span class="mega-nav__panel-link-desc">Hands-on guidance</span></a></li>
+            </ul>
+          </div>
+          <div data-menu-fade="" class="mega-nav__panel-col is--colored"><span data-menu-fade="" class="mega-nav__panel-label">Marketplace</span>
+            <ul class="mega-nav__panel-list">
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Nova Marketplace</span><span class="mega-nav__panel-link-desc">Discounted partner vendors</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Integrations</span><span class="mega-nav__panel-link-desc">Imaging, eRx, clearinghouses</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Reputation management</span><span class="mega-nav__panel-link-desc">Reviews &amp; presence</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- CUSTOMERS panel -->
+      <div data-panel-state="" data-nav-content="customers" role="region" aria-label="customers menu" class="mega-nav__dropdown-panel">
+        <div class="mega-nav__dropdown-inner">
+          <div data-menu-fade="" class="mega-nav__panel-col"><span data-menu-fade="" class="mega-nav__panel-label">By practice type</span>
+            <ul class="mega-nav__panel-list">
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Independent practices</span><span class="mega-nav__panel-link-desc">Solo &amp; small clinics</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">New practices</span><span class="mega-nav__panel-link-desc">Launch with free months</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Groups &amp; DSOs</span><span class="mega-nav__panel-link-desc">Multi-location operators</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Mobile services</span><span class="mega-nav__panel-link-desc">On-site &amp; in-home care</span></a></li>
+            </ul>
+          </div>
+          <div data-menu-fade="" class="mega-nav__panel-col"><span data-menu-fade="" class="mega-nav__panel-label">By specialty</span>
+            <ul class="mega-nav__panel-list">
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Implant specialists</span><span class="mega-nav__panel-link-desc">Logbook &amp; case planning</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Endodontics</span><span class="mega-nav__panel-link-desc">Specialty charting</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Periodontics</span><span class="mega-nav__panel-link-desc">Perio workflow tools</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Orthodontics</span><span class="mega-nav__panel-link-desc">Treatment timeline tracking</span></a></li>
+            </ul>
+          </div>
+          <div data-menu-fade="" class="mega-nav__panel-col is--colored"><span data-menu-fade="" class="mega-nav__panel-label">Resources</span>
+            <ul class="mega-nav__panel-list">
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Customer stories</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Migration guide</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Compare plans</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Onboarding</span></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPANY panel -->
+      <div data-panel-state="" data-nav-content="company" role="region" aria-label="company menu" class="mega-nav__dropdown-panel">
+        <div class="mega-nav__dropdown-inner">
+          <div data-menu-fade="" class="mega-nav__panel-col"><span data-menu-fade="" class="mega-nav__panel-label">Company</span>
+            <ul class="mega-nav__panel-list">
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">About us</span><span class="mega-nav__panel-link-desc">Mission &amp; team</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Careers</span><span class="mega-nav__panel-link-desc">Join Novadontics</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Blog</span><span class="mega-nav__panel-link-desc">News &amp; clinical insights</span></a></li>
+            </ul>
+          </div>
+          <div data-menu-fade="" class="mega-nav__panel-col"><span data-menu-fade="" class="mega-nav__panel-label">Quick links</span>
+            <ul class="mega-nav__panel-list">
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Documentation</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Help center</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Contact</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">Status</span></a></li>
+              <li data-menu-fade=""><a href="#" class="mega-nav__panel-link"><span class="mega-nav__panel-link-text">HIPAA &amp; legal</span></a></li>
+            </ul>
+          </div>
+          <div data-menu-fade="" class="mega-nav__panel-col is--colored has--card">
+            <div class="mega-nav__card">
+              <div class="mega-nav__card-visual"></div>
+              <div class="mega-nav__card-content">
+                <div class="mega-nav__card-text">
+                  <span class="mega-nav__panel-link-text">Book a 30-min demo</span>
+                  <span class="mega-nav__panel-link-desc">See it tailored to your workflow</span>
+                </div>
+                <a href="#cta" class="mega-nav__card-cta">
+                  <span class="mega-nav__card-cta-label">Schedule</span>
+                  <svg class="mega-nav__card-cta-icon" xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 20 20" fill="none"><path d="M8.3335 13.3335L11.6668 10.0002L8.3335 6.66683" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div data-menu-backdrop="" class="mega-nav__backdrop"></div>
 </nav>
 
 <!-- ============ HERO ============ -->
@@ -771,10 +1207,92 @@
     <h1 class="display hero__title">Plans designed for <span class="em-i">every</span> practice.</h1>
     <p class="hero__sub">One platform to run your clinical, front-office, and billing workflows. Every plan is tailored to the way you actually practice — not the other way around.</p>
     <div class="hero__cta">
-      <a href="#cta" class="btn btn--primary btn--large">Schedule a demo</a>
-      <a href="#plans" class="btn btn--secondary btn--large">See the plans</a>
+      <a data-button-004="" data-size="large" href="#cta" class="button-004">
+        <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">Schedule a demo</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">Schedule a demo</span></span>
+        <span class="button-004__bg"></span>
+      </a>
+      <a data-button-004="" data-variant="secondary" data-size="large" href="#plans" class="button-004">
+        <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">See the plans</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">See the plans</span></span>
+        <span class="button-004__bg"></span>
+      </a>
     </div>
-    <p class="hero__divider">Trusted by independent practices, multi-location groups, DSOs, and implant specialists.</p>
+  </div>
+
+  <!-- Hero image (parallax) -->
+  <div class="hero-image" data-parallax="hero">
+    <div class="hero-image__frame">
+      <div class="hero-image__inner" data-parallax-target>
+        <div class="hi-chrome">
+          <span class="hi-dot"></span><span class="hi-dot"></span><span class="hi-dot"></span>
+          <span class="hi-url">app.novadontics.com / dashboard</span>
+        </div>
+        <div class="hi-body">
+          <aside class="hi-side">
+            <div class="hi-brand">Novadontics</div>
+            <div class="hi-navlist">
+              <div class="hi-navitem is--active"><span class="dot"></span>Today</div>
+              <div class="hi-navitem"><span class="dot"></span>Schedule</div>
+              <div class="hi-navitem"><span class="dot"></span>Patients</div>
+              <div class="hi-navitem"><span class="dot"></span>Implant logbook</div>
+              <div class="hi-navitem"><span class="dot"></span>Clinical notes</div>
+              <div class="hi-navitem"><span class="dot"></span>Imaging</div>
+              <div class="hi-navitem"><span class="dot"></span>Billing &amp; claims</div>
+              <div class="hi-navitem"><span class="dot"></span>Reports</div>
+            </div>
+          </aside>
+          <div class="hi-main">
+            <div class="hi-toolbar">
+              <div class="hi-title">Tuesday, 28 May</div>
+              <div class="hi-pillrow">
+                <span class="hi-pill is--ochre">Day</span>
+                <span class="hi-pill">Week</span>
+                <span class="hi-pill">Month</span>
+              </div>
+            </div>
+            <div class="hi-grid">
+              <div class="hi-card">
+                <span class="l">Today's appointments</span>
+                <span class="v">14</span>
+                <span class="d">3 confirmed since 9am</span>
+              </div>
+              <div class="hi-card is--ochre">
+                <span class="l">Production · MTD</span>
+                <span class="v">$184k</span>
+                <span class="d">▲ 12% vs. last month</span>
+              </div>
+              <div class="hi-card">
+                <span class="l">Claims processed</span>
+                <span class="v">38</span>
+                <span class="d">2 awaiting clearance</span>
+              </div>
+            </div>
+            <div class="hi-table">
+              <div class="hi-trow is--head">
+                <span>Patient</span><span>Time</span><span>Procedure</span><span>Status</span>
+              </div>
+              <div class="hi-trow">
+                <span class="hi-name">Marcus Levi</span>
+                <span class="hi-time-large">9:30</span>
+                <span class="hi-time">Implant consult</span>
+                <span><span class="hi-status is--confirmed">Confirmed</span></span>
+              </div>
+              <div class="hi-trow">
+                <span class="hi-name">Priya Anand</span>
+                <span class="hi-time-large">10:15</span>
+                <span class="hi-time">Crown prep</span>
+                <span><span class="hi-status is--confirmed">Confirmed</span></span>
+              </div>
+              <div class="hi-trow">
+                <span class="hi-name">Sofia Reyes</span>
+                <span class="hi-time-large">11:00</span>
+                <span class="hi-time">Recall &amp; cleaning</span>
+                <span><span class="hi-status is--pending">Pending</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -783,14 +1301,16 @@
   <div class="container">
     <div class="pricing__grid">
 
-      <!-- BASIC -->
       <div class="plan reveal">
         <div class="plan__name">Nova Basic</div>
         <div class="plan__tier">The essentials.</div>
         <p class="plan__positioning">Run your practice from a single source of truth. Built for solo locations starting fresh.</p>
         <div class="plan__price">Custom</div>
         <div class="plan__price-note">Tailored to your workflow</div>
-        <button class="btn btn--secondary plan__cta">Get a quote</button>
+        <a data-button-004="" data-variant="secondary" data-size="block" href="#cta" class="button-004 plan__cta">
+          <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">Get a quote</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">Get a quote</span></span>
+          <span class="button-004__bg"></span>
+        </a>
         <ul class="plan__features">
           <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Unlimited users per office</li>
           <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>No setup fee</li>
@@ -801,14 +1321,16 @@
         </ul>
       </div>
 
-      <!-- PLUS -->
       <div class="plan reveal">
         <div class="plan__name">Nova Plus</div>
         <div class="plan__tier">Insurance &amp; claims, sharpened.</div>
         <p class="plan__positioning">Add electronic eligibility, claims management, and payment power to the Basic foundation.</p>
         <div class="plan__price">Custom</div>
         <div class="plan__price-note">Tailored to your workflow</div>
-        <button class="btn btn--secondary plan__cta">Get a quote</button>
+        <a data-button-004="" data-variant="secondary" data-size="block" href="#cta" class="button-004 plan__cta">
+          <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">Get a quote</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">Get a quote</span></span>
+          <span class="button-004__bg"></span>
+        </a>
         <ul class="plan__features">
           <li class="plan__features-prefix">Everything in Basic, plus</li>
           <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>eRx prescribing</li>
@@ -818,7 +1340,6 @@
         </ul>
       </div>
 
-      <!-- PRO (FEATURED) -->
       <div class="plan plan--featured reveal">
         <span class="plan__pill">Most popular</span>
         <div class="plan__name">Nova Pro</div>
@@ -826,7 +1347,10 @@
         <p class="plan__positioning">Paperless intake, automated reminders, and two-way texting on top of full insurance tooling.</p>
         <div class="plan__price">Custom</div>
         <div class="plan__price-note">Tailored to your workflow</div>
-        <button class="btn btn--primary plan__cta">Get a quote</button>
+        <a data-button-004="" data-size="block" href="#cta" class="button-004 plan__cta">
+          <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">Get a quote</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">Get a quote</span></span>
+          <span class="button-004__bg"></span>
+        </a>
         <ul class="plan__features">
           <li class="plan__features-prefix">Everything in Plus, plus</li>
           <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Paperless forms</li>
@@ -837,14 +1361,16 @@
         </ul>
       </div>
 
-      <!-- PREMIUM -->
       <div class="plan reveal">
         <div class="plan__name">Nova Premium</div>
         <div class="plan__tier">The complete clinical suite.</div>
         <p class="plan__positioning">Adds cloud imaging and the full continuing-education library for high-volume practices and implant specialists.</p>
         <div class="plan__price">Custom</div>
         <div class="plan__price-note">Tailored to your workflow</div>
-        <button class="btn btn--secondary plan__cta">Get a quote</button>
+        <a data-button-004="" data-variant="secondary" data-size="block" href="#cta" class="button-004 plan__cta">
+          <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">Get a quote</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">Get a quote</span></span>
+          <span class="button-004__bg"></span>
+        </a>
         <ul class="plan__features">
           <li class="plan__features-prefix">Everything in Pro, plus</li>
           <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Cloud-based imaging</li>
@@ -875,7 +1401,6 @@
       <h2>Compare <span class="em-i">every</span> feature.</h2>
       <p>Side-by-side breakdown of what's included at each tier — no fine print.</p>
     </div>
-
     <div class="compare-wrap reveal">
       <table class="compare-table">
         <thead>
@@ -889,159 +1414,33 @@
         </thead>
         <tbody>
           <tr class="group-row"><td colspan="5">Improve your office operations</td></tr>
-          <tr>
-            <td>Appointment book</td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Family file</td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Reporting &amp; analytics</td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Ledger</td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Smart clinical notes</td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Perio &amp; endo charting</td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Teledentistry</td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Patient bill pay</td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
+          <tr><td>Appointment book</td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Family file</td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Reporting &amp; analytics</td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Ledger</td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Smart clinical notes</td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Perio &amp; endo charting</td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Teledentistry</td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Patient bill pay</td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
 
           <tr class="group-row"><td colspan="5">Improve your patient experience</td></tr>
-          <tr>
-            <td>Paperless forms</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="dash">—</span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Online new patient registration</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="dash">—</span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Appointment &amp; recall reminders</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="dash">—</span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Birthday messages</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="dash">—</span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Two-way texting</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="dash">—</span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
+          <tr><td>Paperless forms</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Online new patient registration</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Appointment &amp; recall reminders</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Birthday messages</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Two-way texting</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
 
           <tr class="group-row"><td colspan="5">Collect &amp; track better</td></tr>
-          <tr>
-            <td>eRx prescribing</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Electronic insurance eligibility</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>eClaims management</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Fast Attach — unlimited attachments</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
+          <tr><td>eRx prescribing</td><td><span class="dash">—</span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Electronic insurance eligibility</td><td><span class="dash">—</span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>eClaims management</td><td><span class="dash">—</span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Fast Attach — unlimited attachments</td><td><span class="dash">—</span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
 
           <tr class="group-row"><td colspan="5">Elevate your implant services</td></tr>
-          <tr>
-            <td>Implant logbook</td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Cloud-based imaging</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="dash">—</span></td>
-            <td class="col-featured"><span class="dash">—</span></td>
-            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
-          </tr>
-          <tr>
-            <td>Unlimited users &amp; storage</td>
-            <td><span class="cell-text">Per office</span></td>
-            <td><span class="cell-text">Per office</span></td>
-            <td class="col-featured"><span class="cell-text">Per office</span></td>
-            <td><span class="cell-text">Unlimited</span></td>
-          </tr>
-          <tr>
-            <td>Online CE module</td>
-            <td><span class="dash">—</span></td>
-            <td><span class="dash">—</span></td>
-            <td class="col-featured"><span class="dash">—</span></td>
-            <td><span class="cell-text">300+ videos</span></td>
-          </tr>
+          <tr><td>Implant logbook</td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Cloud-based imaging</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="col-featured"><span class="dash">—</span></td><td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td></tr>
+          <tr><td>Unlimited users &amp; storage</td><td><span class="cell-text">Per office</span></td><td><span class="cell-text">Per office</span></td><td class="col-featured"><span class="cell-text">Per office</span></td><td><span class="cell-text">Unlimited</span></td></tr>
+          <tr><td>Online CE module</td><td><span class="dash">—</span></td><td><span class="dash">—</span></td><td class="col-featured"><span class="dash">—</span></td><td><span class="cell-text">300+ videos</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -1056,41 +1455,56 @@
       <span class="eyebrow" style="color: var(--honey)">New practice bonus</span>
       <h2 class="incentive__title">Open a new practice. Earn <em class="em-i">free months.</em></h2>
       <p class="incentive__sub">When you outfit a new practice through our Nova Marketplace partners, your spend earns you Novadontics on the house — up to a full year.</p>
-      <a href="#cta" class="btn btn--secondary">See if you qualify</a>
+      <div class="incentive__cta-wrap">
+        <a data-button-004="" data-variant="dark" href="#cta" class="button-004">
+          <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">See if you qualify</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">See if you qualify</span></span>
+          <span class="button-004__bg"></span>
+        </a>
+      </div>
     </div>
     <div class="incentive__bonuses reveal">
-      <div class="bonus">
-        <div class="bonus__amount">$50K</div>
-        <p class="bonus__text">Spend with partner vendors and receive <strong>3 months</strong> of Novadontics free.</p>
-      </div>
-      <div class="bonus">
-        <div class="bonus__amount">$100K</div>
-        <p class="bonus__text">Spend with partner vendors and receive <strong>6 months</strong> of Novadontics free.</p>
-      </div>
-      <div class="bonus">
-        <div class="bonus__amount">$150K</div>
-        <p class="bonus__text">Spend with partner vendors and receive <strong>12 months</strong> of Novadontics free.</p>
-      </div>
+      <div class="bonus"><div class="bonus__amount">$50K</div><p class="bonus__text">Spend with partner vendors and receive <strong>3 months</strong> of Novadontics free.</p></div>
+      <div class="bonus"><div class="bonus__amount">$100K</div><p class="bonus__text">Spend with partner vendors and receive <strong>6 months</strong> of Novadontics free.</p></div>
+      <div class="bonus"><div class="bonus__amount">$150K</div><p class="bonus__text">Spend with partner vendors and receive <strong>12 months</strong> of Novadontics free.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ============ SOCIAL PROOF ============ -->
+<!-- ============ SOCIAL PROOF (redesigned) ============ -->
 <section class="social">
   <span class="section-num">03 · Trust</span>
   <div class="container">
-    <p class="eyebrow social__eyebrow">Trusted by modern practices</p>
-    <div class="social__logos reveal">
-      <span>Westlake Dental</span>
-      <span>Ridge Family DDS</span>
-      <span>Coastline Endo</span>
-      <span>Pinecrest Implant Co.</span>
-      <span>Northgate Smile Studio</span>
-      <span>Meridian Oral Health</span>
+    <div class="social__head reveal">
+      <span class="eyebrow">Trusted by modern practices</span>
+      <h2>The numbers behind <span class="em-i">the platform.</span></h2>
     </div>
-    <div class="container--narrow reveal" style="margin-top: 56px">
-      <p class="social__quote">Novadontics replaced four separate tools and gave us back twenty hours a month. The team adapted the platform to how we actually run our day.</p>
-      <p class="social__attribution">Dr. Lena Vasquez · Westlake Dental, multi-location</p>
+
+    <div class="stat-band reveal">
+      <div class="stat-band__item"><div class="stat-band__num">3,000+</div><div class="stat-band__label">Practices on Novadontics</div></div>
+      <div class="stat-band__item"><div class="stat-band__num">20 hrs</div><div class="stat-band__label">Saved per month, per office</div></div>
+      <div class="stat-band__item"><div class="stat-band__num">4.8/5</div><div class="stat-band__label">Average customer rating</div></div>
+      <div class="stat-band__item"><div class="stat-band__num">12M+</div><div class="stat-band__label">Patient records managed</div></div>
+    </div>
+
+    <div class="logo-wall reveal">
+      <div class="logo-wall__cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg>Westlake</div>
+      <div class="logo-wall__cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20L12 4l8 16M7 14h10"/></svg>Ridge Family</div>
+      <div class="logo-wall__cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12C7 6 17 6 21 12c-4 6-14 6-18 0z"/><circle cx="12" cy="12" r="3"/></svg>Coastline</div>
+      <div class="logo-wall__cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L4 8v8l8 6 8-6V8z"/><path d="M4 8l8 6 8-6M12 14v8"/></svg>Pinecrest</div>
+      <div class="logo-wall__cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>Northgate</div>
+      <div class="logo-wall__cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 18l5-9 5 5 5-10 3 5"/></svg>Meridian</div>
+    </div>
+
+    <div class="testimonial-card reveal">
+      <div class="testimonial-card__avatar"></div>
+      <div class="testimonial-card__body">
+        <p class="testimonial-card__quote">Novadontics replaced four separate tools and gave us back <em>twenty hours a month.</em> The team adapted the platform to how we actually run our day, not how a software company assumed we would.</p>
+        <div class="testimonial-card__attribution">
+          <span class="testimonial-card__name">Dr. Lena Vasquez</span>
+          <span class="testimonial-card__role">Lead Clinician · Westlake Dental, multi-location</span>
+        </div>
+        <a href="#" class="testimonial-card__link">Read the full case study →</a>
+      </div>
     </div>
   </div>
 </section>
@@ -1104,38 +1518,38 @@
       <h2>Questions, <span class="em-i">answered.</span></h2>
     </div>
     <div class="faq__list">
-      <details class="faq__item reveal">
-        <summary>How is pricing actually determined?</summary>
-        <p>Every practice has a different workflow, patient volume, and specialty mix. We tailor each plan to what you actually need — no padding, no surprise modules, no per-seat creep.</p>
-      </details>
-      <details class="faq__item reveal">
-        <summary>Are there setup fees?</summary>
-        <p>No setup fees on any tier. Onboarding and data migration from your existing platform are included from day one.</p>
-      </details>
-      <details class="faq__item reveal">
-        <summary>How many users does each plan support?</summary>
-        <p>Unlimited users per office on every tier. You'll never pay per seat or have to debate which staff member gets a license this month.</p>
-      </details>
-      <details class="faq__item reveal">
-        <summary>Can I switch plans later?</summary>
-        <p>Yes — upgrade, downgrade, or rebalance at any time. Your tier should match where your practice is today, not where it was a year ago.</p>
-      </details>
-      <details class="faq__item reveal">
-        <summary>Is my patient data HIPAA compliant?</summary>
-        <p>All Novadontics infrastructure is HIPAA compliant, encrypted at rest and in transit, and hosted on US-based servers with continuous audit trails.</p>
-      </details>
-      <details class="faq__item reveal">
-        <summary>Which third-party integrations are supported?</summary>
-        <p>Major imaging vendors, eRx providers, insurance clearinghouses, and payment processors. Custom integrations available for groups and DSOs.</p>
-      </details>
-      <details class="faq__item reveal">
-        <summary>Do you offer training?</summary>
-        <p>Live onboarding sessions, a recorded training library, and ongoing US-based support are included on every plan.</p>
-      </details>
-      <details class="faq__item reveal">
-        <summary>What happens to my existing patient data?</summary>
-        <p>Our migration team handles the move from your current platform end-to-end. You go live with your full patient history intact and verified.</p>
-      </details>
+      <div class="faq__item" data-faq data-open="false">
+        <button class="faq__q" aria-expanded="false"><span>How is pricing actually determined?</span><span class="faq__q-icon" aria-hidden="true">+</span></button>
+        <div class="faq__a-wrap"><div class="faq__a"><p>Every practice has a different workflow, patient volume, and specialty mix. We tailor each plan to what you actually need — no padding, no surprise modules, no per-seat creep.</p></div></div>
+      </div>
+      <div class="faq__item" data-faq data-open="false">
+        <button class="faq__q" aria-expanded="false"><span>Are there setup fees?</span><span class="faq__q-icon" aria-hidden="true">+</span></button>
+        <div class="faq__a-wrap"><div class="faq__a"><p>No setup fees on any tier. Onboarding and data migration from your existing platform are included from day one.</p></div></div>
+      </div>
+      <div class="faq__item" data-faq data-open="false">
+        <button class="faq__q" aria-expanded="false"><span>How many users does each plan support?</span><span class="faq__q-icon" aria-hidden="true">+</span></button>
+        <div class="faq__a-wrap"><div class="faq__a"><p>Unlimited users per office on every tier. You'll never pay per seat or have to debate which staff member gets a license this month.</p></div></div>
+      </div>
+      <div class="faq__item" data-faq data-open="false">
+        <button class="faq__q" aria-expanded="false"><span>Can I switch plans later?</span><span class="faq__q-icon" aria-hidden="true">+</span></button>
+        <div class="faq__a-wrap"><div class="faq__a"><p>Yes — upgrade, downgrade, or rebalance at any time. Your tier should match where your practice is today, not where it was a year ago.</p></div></div>
+      </div>
+      <div class="faq__item" data-faq data-open="false">
+        <button class="faq__q" aria-expanded="false"><span>Is my patient data HIPAA compliant?</span><span class="faq__q-icon" aria-hidden="true">+</span></button>
+        <div class="faq__a-wrap"><div class="faq__a"><p>All Novadontics infrastructure is HIPAA compliant, encrypted at rest and in transit, and hosted on US-based servers with continuous audit trails.</p></div></div>
+      </div>
+      <div class="faq__item" data-faq data-open="false">
+        <button class="faq__q" aria-expanded="false"><span>Which third-party integrations are supported?</span><span class="faq__q-icon" aria-hidden="true">+</span></button>
+        <div class="faq__a-wrap"><div class="faq__a"><p>Major imaging vendors, eRx providers, insurance clearinghouses, and payment processors. Custom integrations available for groups and DSOs.</p></div></div>
+      </div>
+      <div class="faq__item" data-faq data-open="false">
+        <button class="faq__q" aria-expanded="false"><span>Do you offer training?</span><span class="faq__q-icon" aria-hidden="true">+</span></button>
+        <div class="faq__a-wrap"><div class="faq__a"><p>Live onboarding sessions, a recorded training library, and ongoing US-based support are included on every plan.</p></div></div>
+      </div>
+      <div class="faq__item" data-faq data-open="false">
+        <button class="faq__q" aria-expanded="false"><span>What happens to my existing patient data?</span><span class="faq__q-icon" aria-hidden="true">+</span></button>
+        <div class="faq__a-wrap"><div class="faq__a"><p>Our migration team handles the move from your current platform end-to-end. You go live with your full patient history intact and verified.</p></div></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1146,7 +1560,10 @@
     <span class="eyebrow final-cta__eyebrow">Ready when you are</span>
     <h2 class="final-cta__title">Run your whole practice from <em>one platform.</em></h2>
     <p class="final-cta__sub">Book a 30-minute demo. We'll show you exactly how Novadontics fits your workflow — and where it pays for itself.</p>
-    <a href="#" class="btn btn--primary btn--large">Schedule a demo</a>
+    <a data-button-004="" data-variant="dark" data-size="large" href="#" class="button-004">
+      <span class="button-004__inner"><span data-button-004-text="" class="button-004__text is--default">Schedule a demo</span><span aria-hidden="true" data-button-004-text="" class="button-004__text is--hover">Schedule a demo</span></span>
+      <span class="button-004__bg"></span>
+    </a>
     <p class="final-cta__note">No credit card. No pressure. Just answers.</p>
   </div>
 </section>
@@ -1207,20 +1624,33 @@
 </footer>
 
 <script>
-  // Nav scroll state
-  const nav = document.getElementById('nav');
-  let scrolled = false;
-  function onScroll() {
-    const isScrolled = window.scrollY > 24;
-    if (isScrolled !== scrolled) {
-      scrolled = isScrolled;
-      nav.classList.toggle('nav--scrolled', scrolled);
-    }
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  /* ============ LENIS SMOOTH SCROLL + GSAP TICKER ============ */
+  gsap.registerPlugin(ScrollTrigger, SplitText);
 
-  // Reveal on scroll
+  const lenis = new Lenis({
+    duration: 1.15,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true,
+    smoothTouch: false,
+  });
+
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+  gsap.ticker.lagSmoothing(0);
+
+  // Anchor smooth scroll via Lenis
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const id = a.getAttribute('href');
+      if (id.length < 2) return;
+      const el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      lenis.scrollTo(el, { offset: -80, duration: 1.2 });
+    });
+  });
+
+  /* ============ REVEAL ON SCROLL ============ */
   const io = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -1231,14 +1661,302 @@
   }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // Close other FAQs when one opens (accordion behavior)
-  document.querySelectorAll('.faq__item').forEach(item => {
-    item.addEventListener('toggle', (e) => {
-      if (item.open) {
-        document.querySelectorAll('.faq__item').forEach(other => {
-          if (other !== item) other.open = false;
+  /* ============ OSMO BUTTON 004 INIT (verbatim) ============ */
+  function initButton004() {
+    const buttons = document.querySelectorAll('[data-button-004]');
+    if (buttons.length === 0) return;
+
+    buttons.forEach((element) => {
+      const textElements = element.querySelectorAll('[data-button-004-text]');
+      if (textElements.length === 0) return;
+
+      textElements.forEach((textElement) => {
+        const splitText = new SplitText(textElement, {
+          type: 'chars',
+          tag: 'span',
+          charsClass: 'button-004__split-char',
         });
+
+        const chars = splitText.chars;
+        const count = chars.length;
+        const center = (count - 1) / 2;
+        const maxIndex = Math.floor(center);
+
+        textElement.style.setProperty('--max-index', maxIndex);
+
+        chars.forEach((char, index) => {
+          const distance = Math.floor(Math.abs(index - center));
+          let signedIndex = 0;
+          if (index < center) signedIndex = distance;
+          else if (index > center) signedIndex = -distance;
+          char.style.setProperty('--index', distance);
+          char.style.setProperty('--signed-index', signedIndex);
+        });
+      });
+    });
+  }
+  document.addEventListener('DOMContentLoaded', initButton004);
+
+  /* ============ OSMO MEGA NAV (directional hover) ============ */
+  function initMegaNavDirectionalHover() {
+    const DUR = {
+      bgMorph: 0.4, contentIn: 0.3, contentOut: 0.2, stagger: 0.25,
+      backdropIn: 0.3, backdropOut: 0.2, openScale: 0.35, closeScale: 0.25,
+    };
+    const HOVER_ENTER = 120;
+    const HOVER_LEAVE = 150;
+
+    const menuWrap = document.querySelector("[data-menu-wrap]");
+    const navList = document.querySelector("[data-nav-list]");
+    const dropWrapper = document.querySelector("[data-dropdown-wrapper]");
+    const dropContainer = document.querySelector("[data-dropdown-container]");
+    const dropBg = document.querySelector("[data-dropdown-bg]");
+    const backdrop = document.querySelector("[data-menu-backdrop]");
+    const toggles = [...document.querySelectorAll("[data-dropdown-toggle]")];
+    const panels = [...document.querySelectorAll("[data-nav-content]")];
+    const burger = document.querySelector("[data-burger-toggle]");
+    const backBtn = document.querySelector("[data-mobile-back]");
+    const logo = document.querySelector("[data-menu-logo]");
+    const [lineTop, lineMid, lineBot] = ["top", "mid", "bot"].map(
+      (id) => document.querySelector(`[data-burger-line='${id}']`)
+    );
+
+    if (!menuWrap || !dropContainer) return;
+
+    const state = {
+      isOpen: false, activePanel: null, activePanelIndex: -1,
+      isMobile: window.innerWidth <= 991, mobileMenuOpen: false, mobilePanelActive: null,
+      hoverTimer: null, leaveTimer: null, tl: null, mobileTl: null, mobilePanelTl: null,
+    };
+
+    const getPanel = (name) => document.querySelector(`[data-nav-content="${name}"]`);
+    const getToggle = (name) => document.querySelector(`[data-dropdown-toggle="${name}"]`);
+    const getFade = (el) => el.querySelectorAll("[data-menu-fade]");
+    const getNavItems = () => navList ? navList.querySelectorAll("[data-nav-list-item]") : [];
+    const getIndex = (name) => toggles.indexOf(getToggle(name));
+    const stagger = (n) => (n <= 1 ? 0 : { amount: DUR.stagger });
+
+    function killTl(key) { if (state[key]) { state[key].kill(); state[key] = null; } }
+    function killDropdown() {
+      killTl("tl");
+      gsap.killTweensOf(dropContainer);
+      gsap.killTweensOf(backdrop);
+      panels.forEach((p) => { gsap.killTweensOf(p); gsap.killTweensOf(getFade(p)); });
+    }
+    function resetToggles() { toggles.forEach((t) => t.setAttribute("aria-expanded", "false")); }
+    function resetDesktop() {
+      panels.forEach((p) => {
+        gsap.set(p, { visibility: "hidden", opacity: 0, pointerEvents: "none", x: 0, y: 0, xPercent: 0 });
+        gsap.set(getFade(p), { autoAlpha: 0, x: 0, y: 0, xPercent: 0 });
+      });
+      gsap.set(dropContainer, { height: 0, clearProps: "transform" });
+      gsap.set(backdrop, { autoAlpha: 0 });
+      menuWrap.setAttribute("data-menu-open", "false");
+      resetToggles();
+    }
+    function measurePanel(name) {
+      const el = getPanel(name);
+      if (!el) return 0;
+      const s = el.style;
+      const prev = [s.visibility, s.opacity, s.pointerEvents];
+      Object.assign(s, { visibility: "visible", opacity: "0", pointerEvents: "none" });
+      const h = el.getBoundingClientRect().height;
+      [s.visibility, s.opacity, s.pointerEvents] = prev;
+      return h;
+    }
+
+    function openDropdown(panelName) {
+      if (state.isOpen && state.activePanel === panelName) return;
+      if (state.isOpen) return switchPanel(state.activePanel, panelName);
+      const height = measurePanel(panelName);
+      if (!height) return;
+      killDropdown(); resetDesktop();
+      const el = getPanel(panelName);
+      const fade = getFade(el);
+      const toggle = getToggle(panelName);
+      state.isOpen = true; state.activePanel = panelName; state.activePanelIndex = getIndex(panelName);
+      menuWrap.setAttribute("data-menu-open", "true");
+      if (toggle) toggle.setAttribute("aria-expanded", "true");
+      gsap.set(dropContainer, { height: 0 });
+      const tl = gsap.timeline(); state.tl = tl;
+      tl.to(backdrop, { autoAlpha: 1, duration: DUR.backdropIn, ease: "power2.out" }, 0);
+      tl.to(dropContainer, { height, duration: DUR.openScale, ease: "power3.out" }, 0);
+      tl.set(el, { visibility: "visible", opacity: 1, pointerEvents: "auto" }, 0.05);
+      if (fade.length) {
+        tl.fromTo(fade, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: DUR.contentIn, stagger: stagger(fade.length), ease: "power3.out" }, 0.1);
       }
+    }
+    function closeDropdown() {
+      if (!state.isOpen) return;
+      const el = getPanel(state.activePanel);
+      const fade = el ? getFade(el) : [];
+      killDropdown();
+      const tl = gsap.timeline({
+        onComplete() {
+          state.isOpen = false; state.activePanel = null; state.activePanelIndex = -1;
+          state.tl = null; resetDesktop();
+        },
+      });
+      state.tl = tl;
+      if (fade.length) tl.to(fade, { autoAlpha: 0, y: -4, duration: DUR.contentOut * 0.7, ease: "power2.in" }, 0);
+      tl.to(dropContainer, { height: 0, duration: DUR.closeScale, ease: "power2.in" }, 0.05);
+      tl.to(backdrop, { autoAlpha: 0, duration: DUR.backdropOut, ease: "power2.out" }, 0);
+      if (el) tl.set(el, { visibility: "hidden", opacity: 0, pointerEvents: "none" });
+    }
+    function switchPanel(fromName, toName) {
+      const dir = getIndex(toName) > getIndex(fromName) ? 1 : -1;
+      const fromEl = getPanel(fromName), toEl = getPanel(toName);
+      if (!fromEl || !toEl) return;
+      const fromFade = getFade(fromEl), toFade = getFade(toEl);
+      const toHeight = measurePanel(toName);
+      if (!toHeight) return;
+      killDropdown();
+      panels.forEach((p) => {
+        gsap.set(p, { visibility: "hidden", opacity: 0, pointerEvents: "none", xPercent: 0 });
+        gsap.set(getFade(p), { autoAlpha: 0, x: 0, y: 0 });
+      });
+      gsap.set(fromEl, { visibility: "visible", opacity: 1, pointerEvents: "auto", x: 0 });
+      if (fromFade.length) gsap.set(fromFade, { autoAlpha: 1, x: 0, y: 0 });
+      gsap.set(backdrop, { autoAlpha: 1 });
+      const toToggle = getToggle(toName);
+      state.activePanel = toName; state.activePanelIndex = getIndex(toName);
+      resetToggles();
+      if (toToggle) toToggle.setAttribute("aria-expanded", "true");
+      const xOut = dir * -30, xIn = dir * 30;
+      const tl = gsap.timeline(); state.tl = tl;
+      if (fromFade.length) tl.to(fromFade, { autoAlpha: 0, x: xOut, duration: DUR.contentOut, ease: "power2.in" }, 0);
+      tl.set(fromEl, { visibility: "hidden", opacity: 0, pointerEvents: "none", xPercent: 0 }, DUR.contentOut);
+      if (fromFade.length) tl.set(fromFade, { x: 0 }, DUR.contentOut);
+      tl.to(dropContainer, { height: toHeight, duration: DUR.bgMorph, ease: "power3.out" }, 0.05);
+      tl.set(toEl, { visibility: "visible", opacity: 1, pointerEvents: "auto", xPercent: 0 }, DUR.contentOut * 0.5);
+      if (toFade.length) {
+        tl.fromTo(toFade, { autoAlpha: 0, x: xIn }, { autoAlpha: 1, x: 0, duration: DUR.contentIn, stagger: stagger(toFade.length), ease: "power3.out" }, DUR.contentOut * 0.6);
+      }
+    }
+    function handleToggleEnter(e) {
+      if (state.isMobile) return;
+      const name = e.currentTarget.getAttribute("data-dropdown-toggle");
+      if (!name) return;
+      clearTimeout(state.leaveTimer); state.leaveTimer = null;
+      clearTimeout(state.hoverTimer);
+      state.hoverTimer = setTimeout(() => openDropdown(name), state.isOpen ? 0 : HOVER_ENTER);
+    }
+    function handleToggleLeave() {
+      if (state.isMobile) return;
+      clearTimeout(state.hoverTimer); state.hoverTimer = null;
+      state.leaveTimer = setTimeout(closeDropdown, HOVER_LEAVE);
+    }
+    function handleWrapperEnter() { if (!state.isMobile) { clearTimeout(state.leaveTimer); state.leaveTimer = null; } }
+    function handleWrapperLeave() { if (!state.isMobile) state.leaveTimer = setTimeout(closeDropdown, HOVER_LEAVE); }
+    function handleEscape(e) {
+      if (e.key !== "Escape") return;
+      if (state.isMobile) return;
+      if (state.isOpen) {
+        const t = getToggle(state.activePanel);
+        closeDropdown(); if (t) t.focus();
+      }
+    }
+    function handleDocClick(e) {
+      if (state.isMobile || !state.isOpen) return;
+      if (!e.target.closest("[data-menu-wrap]")) closeDropdown();
+    }
+
+    toggles.forEach((t) => {
+      t.addEventListener("mouseenter", handleToggleEnter);
+      t.addEventListener("mouseleave", handleToggleLeave);
+      t.addEventListener("click", (e) => {
+        if (state.isMobile) return;
+        e.preventDefault();
+        const name = t.getAttribute("data-dropdown-toggle");
+        if (state.isOpen && state.activePanel === name) closeDropdown();
+        else openDropdown(name);
+      });
+    });
+    if (dropWrapper) {
+      dropWrapper.addEventListener("mouseenter", handleWrapperEnter);
+      dropWrapper.addEventListener("mouseleave", handleWrapperLeave);
+    }
+    document.addEventListener("keydown", handleEscape);
+    document.addEventListener("click", handleDocClick);
+
+    /* Mobile burger toggle */
+    function animateBurger(toX) {
+      const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+      if (toX) {
+        tl.to(lineTop, { y: "0.3125em", duration: 0.15 }, 0);
+        tl.to(lineBot, { y: "-0.3125em", duration: 0.15 }, 0);
+        tl.to(lineMid, { autoAlpha: 0, duration: 0.1 }, 0.1);
+        tl.to(lineTop, { rotation: 45, duration: 0.2 }, 0.15);
+        tl.to(lineBot, { rotation: -45, duration: 0.2 }, 0.15);
+      } else {
+        tl.to([lineTop, lineBot], { rotation: 0, duration: 0.2 }, 0);
+        tl.to([lineTop, lineBot], { y: 0, duration: 0.15 }, 0.2);
+        tl.to(lineMid, { autoAlpha: 1, duration: 0.1 }, 0.25);
+      }
+    }
+    function openMobileMenu() {
+      if (state.mobileMenuOpen) return;
+      state.mobileMenuOpen = true;
+      animateBurger(true);
+      if (burger) burger.setAttribute("aria-expanded", "true");
+      gsap.set(navList, { autoAlpha: 1 });
+      lenis.stop();
+    }
+    function closeMobileMenu() {
+      if (!state.mobileMenuOpen) return;
+      state.mobileMenuOpen = false;
+      animateBurger(false);
+      if (burger) burger.setAttribute("aria-expanded", "false");
+      gsap.to(navList, { autoAlpha: 0, duration: 0.2 });
+      lenis.start();
+    }
+    if (burger) {
+      burger.addEventListener("click", () => {
+        state.mobileMenuOpen ? closeMobileMenu() : openMobileMenu();
+      });
+    }
+    window.addEventListener("resize", () => {
+      state.isMobile = window.innerWidth <= 991;
+      if (!state.isMobile && state.mobileMenuOpen) closeMobileMenu();
+    });
+
+    /* Initial state */
+    resetDesktop();
+  }
+  document.addEventListener('DOMContentLoaded', initMegaNavDirectionalHover);
+
+  /* ============ FAQ ACCORDION (300ms grid-rows) ============ */
+  document.addEventListener('DOMContentLoaded', () => {
+    const items = document.querySelectorAll('[data-faq]');
+    items.forEach((item) => {
+      const q = item.querySelector('.faq__q');
+      q.addEventListener('click', () => {
+        const isOpen = item.getAttribute('data-open') === 'true';
+        items.forEach((other) => {
+          other.setAttribute('data-open', 'false');
+          other.querySelector('.faq__q').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.setAttribute('data-open', 'true');
+          q.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  });
+
+  /* ============ HERO IMAGE PARALLAX ============ */
+  document.addEventListener('DOMContentLoaded', () => {
+    const target = document.querySelector('[data-parallax-target]');
+    if (!target) return;
+    gsap.to(target, {
+      yPercent: -8,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.hero-image',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 0.6,
+      },
     });
   });
 </script>
