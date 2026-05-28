@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Novadontics brand identity styleguide — 2026 refresh. Color, typography, components, voice." />
+<title>Brand Identity · Novadontics 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<style>
+  :root {
+    --cream: #FAF5EB;
+    --paper: #FFFEFA;
+    --sand: #EDE3D2;
+    --sand-muted: #C9BCA9;
+    --ochre: #E27D2A;
+    --ochre-deep: #C76A1F;
+    --honey: #F2B53A;
+    --espresso: #2B1D14;
+    --bark: #5C4A3D;
+    --driftwood: #8B7A6B;
+
+    --serif: 'Instrument Serif', 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    --container: 1240px;
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--bark);
+    background: var(--cream);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  img { max-width: 100%; display: block; }
+  ::selection { background: var(--ochre); color: var(--cream); }
+
+  .container { max-width: var(--container); margin: 0 auto; padding: 0 40px; }
+
+  /* ============ TYPOGRAPHY ============ */
+  h1, h2, h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    color: var(--espresso);
+    margin: 0;
+    line-height: 1.1;
+  }
+  h1 { font-size: clamp(56px, 8vw, 96px); letter-spacing: -0.02em; line-height: 1.04; }
+  h2 { font-size: clamp(36px, 4vw, 48px); }
+  h3 { font-size: 28px; letter-spacing: -0.005em; }
+  p { margin: 0; }
+  em { font-style: italic; }
+  .em-i {
+    font-style: italic;
+    position: relative;
+    display: inline-block;
+  }
+  .em-i::after {
+    content: '';
+    position: absolute;
+    left: 0.04em;
+    right: 0.04em;
+    bottom: 0.05em;
+    height: 2px;
+    background: var(--ochre);
+    border-radius: 1px;
+  }
+  .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--driftwood);
+    display: inline-block;
+  }
+  .label {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--driftwood);
+  }
+  .body-l { font-size: 18px; line-height: 1.55; color: var(--bark); }
+  .body { font-size: 15px; line-height: 1.6; color: var(--bark); }
+  .caption { font-size: 13px; color: var(--driftwood); }
+  .mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0; color: var(--driftwood); }
+
+  /* ============ NAV ============ */
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(250, 245, 235, 0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--sand);
+    padding: 16px 0;
+    font-size: 13px;
+  }
+  .topnav__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+  }
+  .topnav__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--espresso);
+    font-family: var(--serif);
+    font-size: 18px;
+  }
+  .topnav__brand img { height: 28px; }
+  .topnav__meta {
+    color: var(--driftwood);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+  }
+  .topnav__meta em { font-family: var(--serif); font-style: italic; color: var(--bark); }
+
+  /* ============ HEADER ============ */
+  .doc-header {
+    padding: 120px 0 100px;
+    position: relative;
+  }
+  .doc-header__eyebrow { margin-bottom: 28px; }
+  .doc-header h1 { max-width: 1000px; margin-bottom: 36px; }
+  .doc-header__sub {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--bark);
+    max-width: 640px;
+  }
+  .doc-header__meta {
+    margin-top: 64px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    padding-top: 40px;
+    border-top: 1px solid var(--sand);
+  }
+  .doc-header__meta-item .label { display: block; margin-bottom: 8px; }
+  .doc-header__meta-item .v { font-family: var(--serif); font-size: 22px; color: var(--espresso); }
+  @media (max-width: 880px) { .doc-header__meta { grid-template-columns: repeat(2, 1fr); gap: 28px; } }
+
+  /* ============ SECTION ============ */
+  .sec {
+    padding: 96px 0;
+    border-top: 1px solid var(--sand);
+    position: relative;
+  }
+  .sec__num {
+    position: absolute;
+    top: 96px;
+    left: 40px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--driftwood);
+    letter-spacing: 0.04em;
+  }
+  .sec__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+  .sec__head .label { display: block; margin-bottom: 12px; }
+  .sec__head p {
+    max-width: 380px;
+    font-size: 14.5px;
+    color: var(--bark);
+    line-height: 1.55;
+  }
+  @media (max-width: 1100px) { .sec__num { display: none; } }
+
+  /* ============ LOGO SECTION ============ */
+  .logo-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 48px;
+    align-items: stretch;
+  }
+  @media (max-width: 960px) { .logo-grid { grid-template-columns: 1fr; } }
+  .logo-primary {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 16px;
+    padding: 80px 40px;
+    display: grid;
+    place-items: center;
+    position: relative;
+  }
+  .logo-primary::before, .logo-primary::after {
+    content: '';
+    position: absolute;
+    background: var(--ochre);
+    opacity: 0.35;
+  }
+  .logo-primary::before {
+    top: 40px; left: 40px; width: 12px; height: 1px;
+    box-shadow: 0 0 0 0 transparent;
+  }
+  .logo-primary::after {
+    top: 40px; left: 40px; width: 1px; height: 12px;
+  }
+  .logo-primary img { max-height: 88px; width: auto; max-width: 360px; }
+  .logo-grid__caption {
+    grid-column: 1 / -1;
+    color: var(--driftwood);
+    font-size: 13px;
+    line-height: 1.55;
+    max-width: 720px;
+    margin-top: 16px;
+  }
+  .logo-variants {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .logo-variants > div {
+    border-radius: 14px;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 18px;
+    border: 1px solid var(--sand);
+    min-height: 140px;
+  }
+  .lv--cream { background: var(--cream); }
+  .lv--paper { background: var(--paper); }
+  .lv--espresso { background: var(--espresso); border-color: var(--espresso); }
+  .lv--ochre { background: var(--ochre); border-color: var(--ochre); }
+  .logo-variants img { max-height: 32px; width: auto; }
+  .lv--espresso img, .lv--ochre img { filter: brightness(0) invert(1); }
+  .logo-variants .caption { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .lv--espresso .caption, .lv--ochre .caption { color: var(--cream); opacity: 0.85; }
+
+  /* ============ COLOR SWATCHES ============ */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 980px) { .swatch-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .swatch-grid { grid-template-columns: 1fr; } }
+
+  .swatch {
+    border-radius: 16px;
+    padding: 28px 24px 24px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid var(--sand);
+    transition: transform 280ms var(--ease);
+  }
+  .swatch:hover { transform: translateY(-3px); }
+  .swatch__name {
+    font-family: var(--serif);
+    font-size: 30px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .swatch__use {
+    font-size: 13px;
+    line-height: 1.4;
+    margin-bottom: 18px;
+  }
+  .swatch__hex {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    padding-top: 14px;
+    border-top: 1px solid currentColor;
+    opacity: 0.7;
+  }
+  /* Per-swatch palettes — set color/border directly */
+  .sw-cream { background: var(--cream); border-color: var(--sand); color: var(--espresso); }
+  .sw-paper { background: var(--paper); border-color: var(--sand); color: var(--espresso); }
+  .sw-sand { background: var(--sand); border-color: var(--sand-muted); color: var(--espresso); }
+  .sw-sandmuted { background: var(--sand-muted); border-color: var(--sand-muted); color: var(--espresso); }
+  .sw-ochre { background: var(--ochre); border-color: var(--ochre-deep); color: var(--cream); }
+  .sw-honey { background: var(--honey); border-color: var(--honey); color: var(--espresso); }
+  .sw-espresso { background: var(--espresso); border-color: var(--espresso); color: var(--cream); }
+  .sw-bark { background: var(--bark); border-color: var(--bark); color: var(--cream); }
+  .sw-driftwood { background: var(--driftwood); border-color: var(--driftwood); color: var(--cream); }
+
+  .palette-rows .palette-row { margin-bottom: 36px; }
+  .palette-rows .palette-row:last-child { margin-bottom: 0; }
+  .palette-rows .palette-row-label {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--driftwood);
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .pairings {
+    margin-top: 56px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 880px) { .pairings { grid-template-columns: 1fr; } }
+  .pairing {
+    border-radius: 16px;
+    padding: 44px 32px;
+    border: 1px solid var(--sand);
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+  }
+  .pairing h4 {
+    font-family: var(--serif);
+    font-size: 28px;
+    line-height: 1.15;
+    margin: 0;
+    font-weight: 400;
+  }
+  .p-cream-ink { background: var(--cream); color: var(--espresso); }
+  .p-ink-cream { background: var(--espresso); color: var(--cream); }
+  .p-paper-ochre { background: var(--paper); }
+  .p-paper-ochre h4 span.acc { color: var(--ochre); font-style: italic; }
+  .p-ink-cream h4 span.acc { color: var(--honey); font-style: italic; }
+
+  /* ============ TYPOGRAPHY SECTION ============ */
+  .type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  @media (max-width: 980px) { .type-grid { grid-template-columns: 1fr; } }
+  .type-card {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 16px;
+    padding: 48px 40px;
+  }
+  .type-card__alpha {
+    font-family: var(--serif);
+    font-size: 168px;
+    line-height: 0.9;
+    color: var(--espresso);
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+  }
+  .type-card--sans .type-card__alpha {
+    font-family: var(--sans);
+    font-weight: 500;
+    font-size: 152px;
+  }
+  .type-card__name {
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--espresso);
+    margin-bottom: 4px;
+  }
+  .type-card--sans .type-card__name { font-family: var(--sans); font-weight: 600; font-size: 22px; }
+  .type-card__role {
+    font-size: 13px;
+    color: var(--driftwood);
+    margin-bottom: 28px;
+  }
+  .type-card__rule {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--bark);
+    padding-top: 24px;
+    border-top: 1px solid var(--sand);
+  }
+  .type-card__weights {
+    margin-top: 24px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: baseline;
+  }
+  .type-card__weights span {
+    font-family: var(--sans);
+    font-size: 22px;
+    color: var(--espresso);
+  }
+  .type-card__weights span small {
+    font-size: 11px;
+    color: var(--driftwood);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-left: 6px;
+  }
+  .type-card__italic-rule {
+    margin-top: 24px;
+    padding: 24px;
+    background: var(--cream);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .type-card__italic-rule p {
+    font-family: var(--serif);
+    font-size: 30px;
+    color: var(--espresso);
+    line-height: 1.2;
+  }
+  .type-card__italic-rule p em {
+    font-style: italic;
+    position: relative;
+    display: inline-block;
+  }
+  .type-card__italic-rule p em::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.04em;
+    height: 2px;
+    background: var(--ochre);
+  }
+  .type-card__italic-rule .caption {
+    margin-top: 12px;
+    font-size: 12px;
+  }
+
+  /* Type scale table */
+  .scale {
+    margin-top: 48px;
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .scale__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 0.6fr;
+    gap: 24px;
+    align-items: center;
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--sand);
+  }
+  .scale__row:last-child { border-bottom: none; }
+  .scale__row--head {
+    background: var(--sand);
+    padding: 14px 32px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--driftwood);
+  }
+  .scale__name { font-family: var(--serif); font-size: 18px; color: var(--espresso); }
+  .scale__sample { color: var(--espresso); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .scale__meta { font-family: var(--mono); font-size: 11px; color: var(--driftwood); }
+
+  /* ============ UI COMPONENTS ============ */
+  .ui-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 880px) { .ui-grid { grid-template-columns: 1fr; } }
+  .ui-card {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 16px;
+    padding: 36px 32px;
+  }
+  .ui-card h4 {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--espresso);
+    margin: 0 0 6px;
+    font-weight: 400;
+  }
+  .ui-card .caption { margin-bottom: 28px; display: block; }
+  .ui-card__row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 220ms var(--ease);
+    border: none;
+  }
+  .btn--primary { background: var(--ochre); color: var(--cream); }
+  .btn--primary:hover { background: var(--ochre-deep); }
+  .btn--secondary { background: transparent; color: var(--espresso); border: 1px solid var(--espresso); }
+  .btn--secondary:hover { background: var(--espresso); color: var(--cream); }
+  .btn--ghost { background: transparent; color: var(--espresso); text-decoration: underline; text-decoration-color: var(--ochre); text-underline-offset: 4px; padding: 8px 0; }
+  .btn--disabled { background: var(--sand); color: var(--sand-muted); cursor: not-allowed; }
+  .btn-label { font-size: 11px; color: var(--driftwood); letter-spacing: 0.08em; text-transform: uppercase; }
+
+  .input {
+    width: 100%;
+    padding: 14px 16px;
+    font-family: var(--sans);
+    font-size: 15px;
+    color: var(--espresso);
+    background: var(--cream);
+    border: 1px solid var(--sand);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 200ms var(--ease), background 200ms var(--ease);
+  }
+  .input::placeholder { color: var(--driftwood); }
+  .input:focus { border-color: var(--ochre); background: var(--paper); }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 100px;
+  }
+  .pill--honey { background: var(--honey); color: var(--espresso); }
+  .pill--sand { background: var(--sand); color: var(--bark); }
+  .pill--ochre { background: var(--ochre); color: var(--cream); }
+  .pill--outline { background: transparent; border: 1px solid var(--espresso); color: var(--espresso); }
+
+  .plan-mini {
+    background: var(--paper);
+    border: 2px solid var(--ochre);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 260px;
+    position: relative;
+  }
+  .plan-mini .plan-pill {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--honey);
+    color: var(--espresso);
+    padding: 7px 14px;
+    border-radius: 100px;
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px -4px rgba(43, 29, 20, 0.18);
+  }
+  .plan-mini h5 {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--driftwood);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 8px 0 8px;
+  }
+  .plan-mini .price { font-family: var(--serif); font-size: 40px; color: var(--espresso); line-height: 1; margin-bottom: 4px; }
+  .plan-mini .price-note { font-size: 11px; color: var(--driftwood); margin-bottom: 16px; }
+
+  /* ============ ICONOGRAPHY ============ */
+  .icons-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 720px) { .icons-row { grid-template-columns: repeat(3, 1fr); } }
+  .icon-cell {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 14px;
+    aspect-ratio: 1 / 1;
+    display: grid;
+    place-items: center;
+    color: var(--espresso);
+    transition: color 200ms var(--ease), border-color 200ms var(--ease);
+  }
+  .icon-cell:hover { color: var(--ochre); border-color: var(--ochre); }
+  .icon-cell svg { width: 30px; height: 30px; }
+
+  /* ============ VOICE ============ */
+  .voice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+  @media (max-width: 880px) { .voice-grid { grid-template-columns: 1fr; } }
+  .voice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .voice-list p {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 24px;
+    line-height: 1.35;
+    color: var(--espresso);
+    padding-left: 18px;
+    border-left: 2px solid var(--ochre);
+  }
+  .do-dont {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .do-dont > div {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--sand);
+  }
+  .do-dont > div:last-child { border-bottom: none; }
+  .do-dont .label-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .do-dont .label-row .tag {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .do-dont .do .tag { background: var(--ochre); color: var(--cream); }
+  .do-dont .dont .tag { background: var(--sand); color: var(--driftwood); }
+  .do-dont q {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--espresso);
+    quotes: '“' '”';
+    line-height: 1.35;
+  }
+  .do-dont .dont q { color: var(--driftwood); text-decoration: line-through; text-decoration-color: var(--sand-muted); }
+
+  /* ============ PHOTOGRAPHY ============ */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 720px) { .photo-grid { grid-template-columns: 1fr; } }
+  .photo-cell {
+    background: var(--sand);
+    aspect-ratio: 4 / 3;
+    border-radius: 16px;
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(226, 125, 42, 0.18), transparent 60%),
+      radial-gradient(circle at 80% 70%, rgba(242, 181, 58, 0.14), transparent 55%);
+  }
+  .photo-cell::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--sand) 0%, var(--cream) 100%);
+    z-index: 0;
+  }
+  .photo-cell::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 22% 28%, rgba(226, 125, 42, 0.22), transparent 55%),
+      radial-gradient(circle at 78% 72%, rgba(242, 181, 58, 0.18), transparent 55%);
+    z-index: 1;
+  }
+  .photo-cell .photo-label {
+    position: relative;
+    z-index: 2;
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--espresso);
+    font-size: 22px;
+    line-height: 1.2;
+  }
+  .photo-cell .photo-label small {
+    display: block;
+    font-family: var(--sans);
+    font-style: normal;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--driftwood);
+    margin-bottom: 6px;
+  }
+
+  /* ============ APPLICATIONS ============ */
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 880px) { .apps-grid { grid-template-columns: 1fr; } }
+  .app-card {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .app-card .label { display: block; margin-bottom: 14px; }
+  .app-card__inner {
+    aspect-ratio: 5 / 3;
+    border-radius: 10px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .app-bcard { background: var(--espresso); color: var(--cream); }
+  .app-bcard img { height: 18px; filter: brightness(0) invert(1); }
+  .app-bcard .name { font-family: var(--serif); font-size: 18px; line-height: 1.1; }
+  .app-bcard .role { font-family: var(--sans); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--honey); margin-top: 4px; }
+  .app-bcard .meta { font-family: var(--sans); font-size: 10px; color: var(--sand); letter-spacing: 0.04em; line-height: 1.5; }
+
+  .app-email { background: var(--cream); color: var(--espresso); }
+  .app-email .sig {
+    border-top: 2px solid var(--ochre);
+    padding-top: 12px;
+    margin-top: auto;
+  }
+  .app-email .sig .name { font-family: var(--serif); font-size: 17px; }
+  .app-email .sig .role { font-family: var(--sans); font-size: 10px; color: var(--driftwood); letter-spacing: 0.06em; }
+  .app-email .body-text {
+    font-family: var(--sans);
+    font-size: 11px;
+    color: var(--bark);
+    line-height: 1.5;
+  }
+
+  .app-social { background: var(--ochre); color: var(--cream); }
+  .app-social h5 { font-family: var(--serif); font-size: 26px; line-height: 1.1; margin: 0; font-weight: 400; max-width: 260px; }
+  .app-social h5 em { font-style: italic; }
+  .app-social .meta { font-family: var(--sans); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.85; }
+
+  /* ============ FOOTER ============ */
+  .doc-footer {
+    padding: 64px 0 80px;
+    border-top: 1px solid var(--sand);
+    text-align: center;
+  }
+  .doc-footer p {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--driftwood);
+  }
+  .doc-footer .meta {
+    margin-top: 12px;
+    font-size: 11px;
+    color: var(--driftwood);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  /* ============ MOTION ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="container topnav__inner">
+    <a class="topnav__brand" href="#">
+      <img src="assets/logo.png" alt="Novadontics" />
+    </a>
+    <div class="topnav__meta">Brand Identity · <em>2026 Refresh</em></div>
+  </div>
+</nav>
+
+<header class="doc-header">
+  <div class="container">
+    <span class="eyebrow doc-header__eyebrow">Brand Identity · 2026 Refresh</span>
+    <h1>Novadontics, <span class="em-i">refreshed.</span></h1>
+    <p class="doc-header__sub">A modern visual system built on the existing Novadontics mark. Warmer. More confident. More editorial. Designed to feel like a high-end clinic, not a piece of corporate software.</p>
+    <div class="doc-header__meta">
+      <div class="doc-header__meta-item"><span class="label">Discipline</span><span class="v">Brand identity</span></div>
+      <div class="doc-header__meta-item"><span class="label">Engagement</span><span class="v">Pricing &amp; brand refresh</span></div>
+      <div class="doc-header__meta-item"><span class="label">Version</span><span class="v">v1.0 · May 2026</span></div>
+      <div class="doc-header__meta-item"><span class="label">Prepared by</span><span class="v">Softbird</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ 01 · LOGO ============ -->
+<section class="sec">
+  <span class="sec__num">01</span>
+  <div class="container">
+    <div class="sec__head">
+      <div>
+        <span class="label">The mark</span>
+        <h2>One symbol. <span class="em-i">Three lockups.</span></h2>
+      </div>
+      <p>The existing Novadontics mark is preserved without modification. Lockups adapt to surface and context.</p>
+    </div>
+    <div class="logo-grid">
+      <div class="logo-primary">
+        <img src="assets/logo.png" alt="Novadontics primary lockup" />
+      </div>
+      <div class="logo-variants">
+        <div class="lv--cream"><img src="assets/logo.png" alt="Logo on cream" /><span class="caption">On Cream</span></div>
+        <div class="lv--paper"><img src="assets/logo.png" alt="Logo on paper" /><span class="caption">On Paper</span></div>
+        <div class="lv--espresso"><img src="assets/logo.png" alt="Logo on espresso" /><span class="caption">On Espresso</span></div>
+        <div class="lv--ochre"><img src="assets/logo.png" alt="Logo on ochre" /><span class="caption">On Ochre</span></div>
+      </div>
+      <p class="logo-grid__caption">Clear space: maintain a minimum margin equal to the height of the wordmark's lowercase letter on every side. Minimum size: 24 px on screen, 0.5 in in print. Do not stretch, recolor outside this system, or pair with competing graphic elements.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 · COLOR ============ -->
+<section class="sec">
+  <span class="sec__num">02</span>
+  <div class="container">
+    <div class="sec__head">
+      <div>
+        <span class="label">Color system</span>
+        <h2>Anchored. <span class="em-i">Warmed.</span></h2>
+      </div>
+      <p>An evolved warm palette. Espresso replaces corporate black. Ochre carries every confident action. Honey is the rare highlight.</p>
+    </div>
+
+    <div class="palette-rows">
+      <div class="palette-row">
+        <span class="palette-row-label">Core</span>
+        <div class="swatch-grid">
+          <div class="swatch sw-cream"><div><div class="swatch__name">Cream</div><div class="swatch__use">Page background. The warm canvas that lets the serif breathe.</div></div><div class="swatch__hex">#FAF5EB</div></div>
+          <div class="swatch sw-paper"><div><div class="swatch__name">Paper</div><div class="swatch__use">Card surfaces, table cells. Warm white — never stark.</div></div><div class="swatch__hex">#FFFEFA</div></div>
+          <div class="swatch sw-sand"><div><div class="swatch__name">Sand</div><div class="swatch__use">Dividers, alternating rows, soft section bands.</div></div><div class="swatch__hex">#EDE3D2</div></div>
+          <div class="swatch sw-sandmuted"><div><div class="swatch__name">Sand muted</div><div class="swatch__use">Disabled states. The empty cells in comparison tables.</div></div><div class="swatch__hex">#C9BCA9</div></div>
+        </div>
+      </div>
+
+      <div class="palette-row">
+        <span class="palette-row-label">Accent</span>
+        <div class="swatch-grid">
+          <div class="swatch sw-ochre"><div><div class="swatch__name">Ochre</div><div class="swatch__use">Primary action. CTAs, checkmarks, italic underlines, link hovers.</div></div><div class="swatch__hex">#E27D2A</div></div>
+          <div class="swatch sw-honey"><div><div class="swatch__name">Honey</div><div class="swatch__use">Sparingly: "Most popular" pill, dark-section italic emphasis.</div></div><div class="swatch__hex">#F2B53A</div></div>
+        </div>
+      </div>
+
+      <div class="palette-row">
+        <span class="palette-row-label">Dark &amp; text</span>
+        <div class="swatch-grid">
+          <div class="swatch sw-espresso"><div><div class="swatch__name">Espresso</div><div class="swatch__use">Headings, dark sections, footer. Warm brown — never corporate black.</div></div><div class="swatch__hex">#2B1D14</div></div>
+          <div class="swatch sw-bark"><div><div class="swatch__name">Bark</div><div class="swatch__use">Body copy. Warm dark brown, not cold gray.</div></div><div class="swatch__hex">#5C4A3D</div></div>
+          <div class="swatch sw-driftwood"><div><div class="swatch__name">Driftwood</div><div class="swatch__use">Captions, secondary text, table labels.</div></div><div class="swatch__hex">#8B7A6B</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pairings">
+      <div class="pairing p-cream-ink"><h4>Plans designed for every practice.</h4></div>
+      <div class="pairing p-ink-cream"><h4>Run your whole practice from <span class="acc">one platform.</span></h4></div>
+      <div class="pairing p-paper-ochre"><h4>Get a <span class="acc">tailored quote.</span></h4></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 · TYPOGRAPHY ============ -->
+<section class="sec">
+  <span class="sec__num">03</span>
+  <div class="container">
+    <div class="sec__head">
+      <div>
+        <span class="label">Typography</span>
+        <h2>Editorial display. <span class="em-i">Industrial body.</span></h2>
+      </div>
+      <p>An Instrument Serif &amp; Inter pairing. Serif for voice and weight. Sans for clarity and structure.</p>
+    </div>
+
+    <div class="type-grid">
+      <div class="type-card">
+        <div class="type-card__alpha">Aa</div>
+        <div class="type-card__name">Instrument Serif</div>
+        <div class="type-card__role">Display · Regular &amp; Italic</div>
+        <p class="type-card__rule">Used for headings, prices, large numerical figures, and editorial pull quotes. Italic carries emotional emphasis — apply to one word per headline, no more.</p>
+        <div class="type-card__italic-rule">
+          <p>Plans designed for <em>every</em> practice.</p>
+          <span class="caption">Italic emphasis · 2 px Ochre underline below baseline</span>
+        </div>
+      </div>
+      <div class="type-card type-card--sans">
+        <div class="type-card__alpha">Aa</div>
+        <div class="type-card__name">Inter</div>
+        <div class="type-card__role">UI &amp; body · 400 / 500 / 600</div>
+        <p class="type-card__rule">Used for body copy, UI labels, table content, buttons, and microcopy. Set body at 16 px with 1.6 line-height. Eyebrow labels: 12 px, 500 weight, uppercase, tracked +0.14 em.</p>
+        <div class="type-card__weights">
+          <span style="font-weight:400">Regular<small>400</small></span>
+          <span style="font-weight:500">Medium<small>500</small></span>
+          <span style="font-weight:600">Semibold<small>600</small></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="scale">
+      <div class="scale__row scale__row--head">
+        <span>Token</span>
+        <span>Sample</span>
+        <span>Family</span>
+        <span>Size · LH</span>
+      </div>
+      <div class="scale__row">
+        <span class="scale__name">Display</span>
+        <span class="scale__sample" style="font-family:var(--serif);font-size:48px;line-height:1.04">Plans designed</span>
+        <span class="mono">Instrument Serif</span>
+        <span class="mono">96 · 1.04</span>
+      </div>
+      <div class="scale__row">
+        <span class="scale__name">H1</span>
+        <span class="scale__sample" style="font-family:var(--serif);font-size:36px;line-height:1.1">One platform.</span>
+        <span class="mono">Instrument Serif</span>
+        <span class="mono">72 · 1.1</span>
+      </div>
+      <div class="scale__row">
+        <span class="scale__name">H2</span>
+        <span class="scale__sample" style="font-family:var(--serif);font-size:32px;line-height:1.15">Compare every feature.</span>
+        <span class="mono">Instrument Serif</span>
+        <span class="mono">56 · 1.15</span>
+      </div>
+      <div class="scale__row">
+        <span class="scale__name">H3</span>
+        <span class="scale__sample" style="font-family:var(--serif);font-size:24px;line-height:1.25">The essentials.</span>
+        <span class="mono">Instrument Serif</span>
+        <span class="mono">28 · 1.3</span>
+      </div>
+      <div class="scale__row">
+        <span class="scale__name">Body L</span>
+        <span class="scale__sample" style="font-family:var(--sans);font-size:18px;line-height:1.55">One platform to run your clinical and front-office workflows.</span>
+        <span class="mono">Inter 400</span>
+        <span class="mono">20 · 1.55</span>
+      </div>
+      <div class="scale__row">
+        <span class="scale__name">Body</span>
+        <span class="scale__sample" style="font-family:var(--sans);font-size:15px;line-height:1.6">Every plan is tailored to the way you actually practice.</span>
+        <span class="mono">Inter 400</span>
+        <span class="mono">16 · 1.6</span>
+      </div>
+      <div class="scale__row">
+        <span class="scale__name">Caption</span>
+        <span class="scale__sample" style="font-family:var(--sans);font-size:13px;color:var(--driftwood)">No credit card. No pressure. Just answers.</span>
+        <span class="mono">Inter 400</span>
+        <span class="mono">13 · 1.5</span>
+      </div>
+      <div class="scale__row">
+        <span class="scale__name">Eyebrow</span>
+        <span class="scale__sample" style="font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--driftwood)">Pricing · 2026</span>
+        <span class="mono">Inter 500</span>
+        <span class="mono">12 · +0.14em</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 · UI COMPONENTS ============ -->
+<section class="sec">
+  <span class="sec__num">04</span>
+  <div class="container">
+    <div class="sec__head">
+      <div>
+        <span class="label">Building blocks</span>
+        <h2>Components, <span class="em-i">composed.</span></h2>
+      </div>
+      <p>A handful of foundational components. Restrained. Consistent. Built to scale across the product surface.</p>
+    </div>
+
+    <div class="ui-grid">
+
+      <div class="ui-card">
+        <h4>Buttons</h4>
+        <span class="caption">Three tiers, one clear hierarchy.</span>
+        <div class="ui-card__row" style="gap:12px">
+          <button class="btn btn--primary">Schedule a demo</button>
+          <button class="btn btn--secondary">See the plans</button>
+          <button class="btn btn--ghost">Learn more</button>
+          <button class="btn btn--disabled" disabled>Unavailable</button>
+        </div>
+        <div style="margin-top: 18px"><span class="btn-label">Primary · Secondary · Ghost · Disabled</span></div>
+      </div>
+
+      <div class="ui-card">
+        <h4>Form field</h4>
+        <span class="caption">Single, consistent focus state. Ochre border on activate.</span>
+        <input type="email" class="input" placeholder="dr.lena@westlakedental.com" />
+        <div style="margin-top: 18px"><span class="btn-label">Default · Focus border switches to Ochre</span></div>
+      </div>
+
+      <div class="ui-card">
+        <h4>Pills &amp; badges</h4>
+        <span class="caption">Honey for "popular." Ochre for emphasis. Sand for quiet metadata.</span>
+        <div class="ui-card__row">
+          <span class="pill pill--honey">Most popular</span>
+          <span class="pill pill--ochre">New</span>
+          <span class="pill pill--sand">Beta</span>
+          <span class="pill pill--outline">Compliance</span>
+        </div>
+      </div>
+
+      <div class="ui-card">
+        <h4>Surface card</h4>
+        <span class="caption">Paper on Cream, 1 px Sand border, 16 px radius. Featured variant uses 2 px Ochre.</span>
+        <div class="plan-mini">
+          <span class="plan-pill">Most popular</span>
+          <h5>Nova Pro</h5>
+          <div class="price">Custom</div>
+          <div class="price-note">Tailored to your workflow</div>
+          <button class="btn btn--primary" style="width:100%;justify-content:center">Get a quote</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 · ICONOGRAPHY ============ -->
+<section class="sec">
+  <span class="sec__num">05</span>
+  <div class="container">
+    <div class="sec__head">
+      <div>
+        <span class="label">Iconography</span>
+        <h2>One family. <span class="em-i">One stroke.</span></h2>
+      </div>
+      <p>Line icons only. 1.75 px stroke, rounded caps and joins, Espresso by default. Lucide or Phosphor (regular weight) recommended.</p>
+    </div>
+    <div class="icons-row">
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4.5 4.5L19 7"/></svg>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></svg>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4.5 5-6 8-6s6.5 1.5 8 6"/></svg>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V7l8-4z"/></svg>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.6-7l3.6-1-1 4"/></svg>
+      </div>
+      <div class="icon-cell">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5M4 19h16M8 16v-6M12 16V8M16 16v-4M20 16v-9"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 · VOICE ============ -->
+<section class="sec">
+  <span class="sec__num">06</span>
+  <div class="container">
+    <div class="sec__head">
+      <div>
+        <span class="label">Voice &amp; tone</span>
+        <h2>How we <span class="em-i">sound.</span></h2>
+      </div>
+      <p>Confident, not corporate. Specific, not jargon-y. Warm, but never folksy. Always respect the reader's time.</p>
+    </div>
+    <div class="voice-grid">
+      <div class="voice-list">
+        <p>Confident, not corporate.</p>
+        <p>Specific, not jargon-y. Say "twenty hours back per month" — not "increased operational efficiency."</p>
+        <p>Warm, but never folksy. The reader is a busy clinician.</p>
+        <p>Lead with the practitioner's outcome. The product is the vehicle.</p>
+      </div>
+      <div class="do-dont">
+        <div class="do">
+          <div class="label-row"><span class="tag">Do</span><span class="caption">Direct. Specific. Outcome-led.</span></div>
+          <q>Run your whole practice from one platform.</q>
+        </div>
+        <div class="dont">
+          <div class="label-row"><span class="tag">Don't</span><span class="caption">Vague. Buzzy. Self-referential.</span></div>
+          <q>Leverage our cutting-edge solution to optimize your dental operations.</q>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 · PHOTOGRAPHY ============ -->
+<section class="sec">
+  <span class="sec__num">07</span>
+  <div class="container">
+    <div class="sec__head">
+      <div>
+        <span class="label">Photography</span>
+        <h2>Editorial. <span class="em-i">Human.</span></h2>
+      </div>
+      <p>Real clinical environments. Soft natural light. Neutral tones with warmth. Avoid stock dentist-with-mirror clichés.</p>
+    </div>
+    <div class="photo-grid">
+      <div class="photo-cell"><div class="photo-label"><small>01 · Clinical environment</small>The room, breathing.</div></div>
+      <div class="photo-cell"><div class="photo-label"><small>02 · Software in context</small>The screen mid-thought.</div></div>
+      <div class="photo-cell"><div class="photo-label"><small>03 · Practitioner portrait</small>The clinician, at rest.</div></div>
+      <div class="photo-cell"><div class="photo-label"><small>04 · Product detail</small>The hardware up close.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 08 · APPLICATIONS ============ -->
+<section class="sec">
+  <span class="sec__num">08</span>
+  <div class="container">
+    <div class="sec__head">
+      <div>
+        <span class="label">In the wild</span>
+        <h2>One identity. <span class="em-i">Many surfaces.</span></h2>
+      </div>
+      <p>The system extends naturally into client-facing touchpoints — business cards, email signatures, social posts.</p>
+    </div>
+    <div class="apps-grid">
+      <div class="app-card">
+        <span class="label">Business card</span>
+        <div class="app-card__inner app-bcard">
+          <img src="assets/logo.png" alt="Logo" />
+          <div>
+            <div class="name">Dr. Lena Vasquez</div>
+            <div class="role">Lead Clinician</div>
+          </div>
+          <div class="meta">team@novadontics.com<br/>(888) 838-6682</div>
+        </div>
+      </div>
+      <div class="app-card">
+        <span class="label">Email signature</span>
+        <div class="app-card__inner app-email">
+          <div class="body-text">"Looking forward to the demo — I'll bring the patient pipeline numbers."</div>
+          <div class="sig">
+            <div class="name">Dr. Lena Vasquez</div>
+            <div class="role">Lead Clinician · Westlake Dental</div>
+          </div>
+        </div>
+      </div>
+      <div class="app-card">
+        <span class="label">Social post</span>
+        <div class="app-card__inner app-social">
+          <div class="meta">@novadontics</div>
+          <h5>Plans designed for <em>every</em> practice.</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="doc-footer">
+  <div class="container">
+    <p>Novadontics brand system · 2026</p>
+    <div class="meta">Prepared by Softbird · v1.0</div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.sec, .doc-header, .pairings, .scale').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>

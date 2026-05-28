@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Novadontics pricing — one platform to run your whole practice. Tailored plans for solo practices, multi-location groups, DSOs, and implant specialists." />
+<meta property="og:title" content="Novadontics · Pricing" />
+<meta property="og:description" content="Plans designed for every practice. Tailored, transparent, and built to grow with you." />
+<title>Pricing · Novadontics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="icon" type="image/png" href="assets/logo.png" />
+<style>
+  /* ============ DESIGN TOKENS ============ */
+  :root {
+    --cream: #FAF5EB;
+    --paper: #FFFEFA;
+    --sand: #EDE3D2;
+    --sand-muted: #C9BCA9;
+    --ochre: #E27D2A;
+    --ochre-deep: #C76A1F;
+    --ochre-soft: rgba(226, 125, 42, 0.08);
+    --honey: #F2B53A;
+    --espresso: #2B1D14;
+    --espresso-90: rgba(43, 29, 20, 0.9);
+    --bark: #5C4A3D;
+    --driftwood: #8B7A6B;
+
+    --serif: 'Instrument Serif', 'Times New Roman', serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --container: 1240px;
+    --container-narrow: 920px;
+    --container-tight: 680px;
+
+    --radius-sm: 8px;
+    --radius: 14px;
+    --radius-lg: 20px;
+
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ============ RESET ============ */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--bark);
+    background: var(--cream);
+    font-feature-settings: 'ss01', 'cv11', 'ss03';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  img { max-width: 100%; display: block; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--ochre); color: var(--cream); }
+
+  /* ============ TYPOGRAPHY ============ */
+  .eyebrow {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--driftwood);
+    display: inline-block;
+  }
+  .display, h1, h2, h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    color: var(--espresso);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .display { font-size: clamp(56px, 8vw, 96px); line-height: 1.04; letter-spacing: -0.02em; }
+  h1 { font-size: clamp(48px, 6vw, 72px); }
+  h2 { font-size: clamp(36px, 5vw, 56px); line-height: 1.1; }
+  h3 { font-size: clamp(22px, 2.4vw, 28px); }
+  p { margin: 0; }
+  em { font-style: italic; }
+
+  /* Italic emphasis with Ochre underline */
+  .em-i {
+    font-style: italic;
+    position: relative;
+    display: inline-block;
+  }
+  .em-i::after {
+    content: '';
+    position: absolute;
+    left: 0.04em;
+    right: 0.04em;
+    bottom: 0.04em;
+    height: 2px;
+    background: var(--ochre);
+    border-radius: 1px;
+  }
+
+  /* ============ LAYOUT ============ */
+  .container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 32px; }
+  .container--narrow { max-width: var(--container-narrow); }
+  .container--tight { max-width: var(--container-tight); }
+  .section { padding: 120px 0; position: relative; }
+  .section--tight { padding: 80px 0; }
+  .section--paper { background: var(--paper); }
+  .section--sand { background: var(--sand); }
+  .section--dark { background: var(--espresso); color: var(--cream); }
+  .section--dark h1, .section--dark h2, .section--dark h3 { color: var(--cream); }
+  .section--dark .eyebrow { color: var(--honey); }
+  .section--dark .em-i { color: var(--honey); }
+  .section--dark .em-i::after { display: none; }
+
+  /* ============ BUTTONS ============ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    border-radius: var(--radius-sm);
+    transition: all 220ms var(--ease);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .btn--primary {
+    background: var(--ochre);
+    color: var(--cream);
+  }
+  .btn--primary:hover { background: var(--ochre-deep); transform: translateY(-1px); }
+  .btn--secondary {
+    background: transparent;
+    color: var(--espresso);
+    border: 1px solid var(--espresso);
+  }
+  .btn--secondary:hover { background: var(--espresso); color: var(--cream); }
+  .btn--ghost {
+    color: var(--espresso);
+    padding: 10px 0;
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 220ms var(--ease);
+  }
+  .btn--ghost:hover { text-decoration-color: var(--ochre); }
+  .btn--large { padding: 20px 36px; font-size: 15px; }
+  .section--dark .btn--secondary {
+    color: var(--cream);
+    border-color: var(--cream);
+  }
+  .section--dark .btn--secondary:hover { background: var(--cream); color: var(--espresso); }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 18px 0;
+    transition: background 280ms var(--ease), backdrop-filter 280ms var(--ease), border-color 280ms var(--ease);
+    border-bottom: 1px solid transparent;
+  }
+  .nav--scrolled {
+    background: rgba(250, 245, 235, 0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom-color: var(--sand);
+  }
+  .nav__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+  }
+  .nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--espresso);
+  }
+  .nav__brand img { height: 32px; width: auto; }
+  .nav__brand-mark {
+    height: 32px;
+    width: 32px;
+    background: var(--espresso);
+    color: var(--cream);
+    display: grid;
+    place-items: center;
+    font-family: var(--serif);
+    font-size: 18px;
+    border-radius: 50%;
+    line-height: 1;
+  }
+  .nav__links {
+    display: flex;
+    gap: 36px;
+    font-size: 14px;
+    color: var(--bark);
+  }
+  .nav__links a {
+    position: relative;
+    padding: 6px 0;
+    transition: color 200ms var(--ease);
+  }
+  .nav__links a:hover { color: var(--espresso); }
+  .nav__links a.is-active { color: var(--espresso); }
+  .nav__links a.is-active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: var(--ochre);
+    border-radius: 1px;
+  }
+  .nav__cta { display: flex; align-items: center; gap: 24px; font-size: 14px; }
+  .nav__login { color: var(--bark); transition: color 200ms var(--ease); }
+  .nav__login:hover { color: var(--espresso); }
+  @media (max-width: 880px) {
+    .nav__links { display: none; }
+    .nav__login { display: none; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    padding: 200px 0 120px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero__eyebrow { margin-bottom: 32px; }
+  .hero__title { max-width: 1000px; margin: 0 auto 28px; }
+  .hero__sub {
+    max-width: 580px;
+    margin: 0 auto 48px;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--bark);
+  }
+  .hero__cta { display: inline-flex; gap: 16px; }
+  .hero__divider {
+    margin-top: 96px;
+    color: var(--driftwood);
+    font-size: 13px;
+    font-family: var(--serif);
+    font-style: italic;
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 140px 0 80px; }
+    .hero__cta { flex-direction: column; align-items: stretch; max-width: 280px; margin: 0 auto; }
+  }
+
+  /* ============ PRICING CARDS ============ */
+  .pricing { padding: 32px 0 120px; }
+  .pricing__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+  @media (max-width: 1100px) { .pricing__grid { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
+  @media (max-width: 640px) { .pricing__grid { grid-template-columns: 1fr; } }
+
+  .plan {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: var(--radius-lg);
+    padding: 40px 32px 36px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: transform 320ms var(--ease-out), box-shadow 320ms var(--ease);
+  }
+  .plan:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(43, 29, 20, 0.18);
+  }
+  .plan--featured {
+    border-color: var(--ochre);
+    border-width: 2px;
+    padding-top: 44px;
+  }
+  .plan__pill {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--honey);
+    color: var(--espresso);
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 9px 16px;
+    border-radius: 100px;
+    box-shadow: 0 4px 12px -4px rgba(43, 29, 20, 0.18);
+    white-space: nowrap;
+  }
+  .plan__name {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--driftwood);
+    margin-bottom: 14px;
+  }
+  .plan__tier {
+    font-family: var(--serif);
+    font-size: 32px;
+    line-height: 1;
+    color: var(--espresso);
+    margin-bottom: 14px;
+  }
+  .plan__positioning {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--bark);
+    min-height: 64px;
+    margin-bottom: 28px;
+  }
+  .plan__price {
+    font-family: var(--serif);
+    font-size: 52px;
+    line-height: 1;
+    color: var(--espresso);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
+  .plan__price-note {
+    font-size: 12px;
+    color: var(--driftwood);
+    margin-bottom: 28px;
+  }
+  .plan__cta { width: 100%; justify-content: center; margin-bottom: 28px; }
+  .plan__features { list-style: none; padding: 0; margin: 0; font-size: 13.5px; line-height: 1.5; color: var(--bark); }
+  .plan__features li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+  }
+  .plan__features-prefix {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--driftwood);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 0 12px;
+    border-top: 1px solid var(--sand);
+    margin-top: 8px;
+  }
+  .plan__check {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    margin-top: 4px;
+    color: var(--ochre);
+  }
+  .plan__custom-note {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 14px;
+    color: var(--driftwood);
+  }
+  .plan__custom-note a { color: var(--espresso); border-bottom: 1px solid var(--ochre); padding-bottom: 1px; transition: color 200ms var(--ease); }
+  .plan__custom-note a:hover { color: var(--ochre); }
+
+  /* ============ INCLUDED BAND ============ */
+  .included-band {
+    padding: 56px 0;
+    text-align: center;
+    background: var(--sand);
+  }
+  .included-band__title {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(24px, 3vw, 32px);
+    color: var(--espresso);
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  .included-band__sub {
+    font-size: 14px;
+    color: var(--bark);
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* ============ COMPARISON TABLE ============ */
+  .compare-head { text-align: center; margin-bottom: 64px; }
+  .compare-head .eyebrow { margin-bottom: 18px; }
+  .compare-head p { color: var(--driftwood); font-size: 17px; max-width: 540px; margin: 18px auto 0; }
+  .compare-wrap {
+    background: var(--paper);
+    border: 1px solid var(--sand);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+  }
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    table-layout: fixed;
+  }
+  .compare-table th, .compare-table td {
+    padding: 18px 20px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--sand);
+  }
+  .compare-table th:first-child, .compare-table td:first-child {
+    text-align: left;
+    color: var(--bark);
+    font-weight: 400;
+    width: 36%;
+  }
+  .compare-table thead th {
+    background: var(--paper);
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--espresso);
+    font-weight: 400;
+    padding: 28px 20px 24px;
+    position: sticky;
+    top: 64px;
+    z-index: 2;
+  }
+  .compare-table thead th:first-child {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--driftwood);
+  }
+  .compare-table thead th .col-name { display: block; line-height: 1; }
+  .compare-table thead th .col-mini {
+    display: block;
+    margin-top: 6px;
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--driftwood);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .compare-table .col-featured {
+    background: var(--ochre-soft);
+    border-left: 1px solid rgba(226, 125, 42, 0.18);
+    border-right: 1px solid rgba(226, 125, 42, 0.18);
+  }
+  .compare-table thead th.col-featured .col-mini { color: var(--ochre); }
+  .compare-table .group-row td {
+    background: var(--sand);
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bark);
+    padding: 14px 20px;
+    text-align: left;
+  }
+  .compare-table tbody tr:nth-child(even of :not(.group-row)) td { background: rgba(237, 227, 210, 0.32); }
+  .compare-table tbody tr:nth-child(even of :not(.group-row)) td.col-featured { background: rgba(226, 125, 42, 0.12); }
+  .check { color: var(--ochre); display: inline-block; }
+  .check svg { width: 16px; height: 16px; }
+  .dash { color: var(--sand-muted); font-size: 18px; line-height: 1; }
+  .cell-text { font-size: 12px; color: var(--bark); font-weight: 500; }
+  .compare-table tbody tr:last-child td { border-bottom: none; }
+
+  @media (max-width: 900px) {
+    .compare-wrap { overflow-x: auto; }
+    .compare-table { min-width: 760px; }
+  }
+
+  /* ============ INCENTIVE ============ */
+  .incentive { background: var(--espresso); color: var(--cream); }
+  .incentive__inner {
+    display: grid;
+    grid-template-columns: 1.1fr 1.4fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .incentive__title {
+    font-family: var(--serif);
+    font-size: clamp(40px, 4.6vw, 56px);
+    line-height: 1.05;
+    color: var(--cream);
+    margin: 24px 0 24px;
+  }
+  .incentive__sub { color: var(--sand); font-size: 16px; line-height: 1.6; max-width: 380px; margin-bottom: 36px; }
+  .incentive__bonuses { display: flex; flex-direction: column; gap: 16px; }
+  .bonus {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 28px;
+    align-items: center;
+    background: rgba(250, 245, 235, 0.04);
+    border: 1px solid rgba(250, 245, 235, 0.08);
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    transition: border-color 240ms var(--ease), background 240ms var(--ease);
+  }
+  .bonus:hover {
+    border-color: rgba(242, 181, 58, 0.4);
+    background: rgba(250, 245, 235, 0.06);
+  }
+  .bonus__amount {
+    font-family: var(--serif);
+    font-size: 36px;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .bonus__text { color: var(--sand); font-size: 14.5px; line-height: 1.55; }
+  .bonus__text strong { color: var(--honey); font-weight: 500; font-style: italic; font-family: var(--serif); font-size: 18px; }
+  .incentive .btn--secondary { margin-top: 8px; }
+  @media (max-width: 960px) {
+    .incentive__inner { grid-template-columns: 1fr; gap: 48px; }
+    .bonus { grid-template-columns: 110px 1fr; }
+  }
+
+  /* ============ SOCIAL PROOF ============ */
+  .social { padding: 120px 0 100px; text-align: center; }
+  .social__eyebrow { margin-bottom: 36px; }
+  .social__logos {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px;
+    align-items: center;
+    max-width: 1080px;
+    margin: 0 auto 80px;
+    opacity: 0.78;
+  }
+  .social__logos span {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bark);
+    text-align: center;
+    line-height: 1.3;
+  }
+  @media (max-width: 900px) {
+    .social__logos { grid-template-columns: repeat(3, 1fr); gap: 32px 24px; }
+  }
+  .social__quote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.4;
+    color: var(--espresso);
+    max-width: 820px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+  .social__quote::before {
+    content: '“';
+    font-family: var(--serif);
+    font-size: 84px;
+    color: var(--ochre);
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.5;
+    line-height: 1;
+  }
+  .social__attribution {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--driftwood);
+    letter-spacing: 0.04em;
+  }
+
+  /* ============ FAQ ============ */
+  .faq { background: var(--paper); }
+  .faq__head { text-align: center; margin-bottom: 56px; }
+  .faq__list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 56px;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  @media (max-width: 880px) { .faq__list { grid-template-columns: 1fr; } }
+  .faq__item {
+    border-bottom: 1px solid var(--sand);
+    padding: 24px 0;
+  }
+  .faq__item summary {
+    list-style: none;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--espresso);
+    line-height: 1.4;
+    transition: color 200ms var(--ease);
+  }
+  .faq__item summary:hover { color: var(--ochre); }
+  .faq__item summary::-webkit-details-marker { display: none; }
+  .faq__item summary::after {
+    content: '+';
+    font-family: var(--serif);
+    font-size: 26px;
+    line-height: 1;
+    color: var(--driftwood);
+    flex-shrink: 0;
+    transition: transform 280ms var(--ease), color 200ms var(--ease);
+  }
+  .faq__item[open] summary::after { transform: rotate(45deg); color: var(--ochre); }
+  .faq__item p {
+    margin-top: 16px;
+    font-size: 14.5px;
+    line-height: 1.65;
+    color: var(--bark);
+    max-width: 480px;
+  }
+
+  /* ============ FINAL CTA ============ */
+  .final-cta { padding: 160px 0; text-align: center; background: var(--espresso); color: var(--cream); }
+  .final-cta__eyebrow { color: var(--honey); margin-bottom: 28px; }
+  .final-cta__title {
+    font-family: var(--serif);
+    font-size: clamp(48px, 7vw, 84px);
+    line-height: 1.05;
+    color: var(--cream);
+    max-width: 920px;
+    margin: 0 auto 32px;
+    letter-spacing: -0.015em;
+  }
+  .final-cta__title em { color: var(--honey); font-style: italic; }
+  .final-cta__sub {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--sand);
+    max-width: 580px;
+    margin: 0 auto 48px;
+  }
+  .final-cta__note {
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--driftwood);
+    font-family: var(--serif);
+    font-style: italic;
+  }
+
+  /* ============ FOOTER ============ */
+  .footer {
+    background: var(--espresso);
+    color: var(--sand);
+    padding: 64px 0 32px;
+    border-top: 1px solid rgba(250, 245, 235, 0.08);
+  }
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 56px;
+  }
+  @media (max-width: 880px) { .footer__inner { grid-template-columns: 1fr 1fr; gap: 40px; } }
+  .footer__brand img { height: 28px; margin-bottom: 16px; filter: brightness(0) invert(1); opacity: 0.92; }
+  .footer__brand p { font-family: var(--serif); font-style: italic; font-size: 16px; color: var(--sand); max-width: 280px; line-height: 1.5; }
+  .footer__col h4 {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--honey);
+    margin: 0 0 18px;
+  }
+  .footer__col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+  .footer__col a {
+    font-size: 13px;
+    color: var(--sand);
+    opacity: 0.78;
+    transition: opacity 200ms var(--ease), color 200ms var(--ease);
+  }
+  .footer__col a:hover { opacity: 1; color: var(--honey); }
+  .footer__bottom {
+    padding-top: 28px;
+    border-top: 1px solid rgba(250, 245, 235, 0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--driftwood);
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .footer__bottom span { letter-spacing: 0.04em; }
+
+  /* ============ REVEAL ON SCROLL ============ */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ============ MARGIN MARKERS (editorial) ============ */
+  .section-num {
+    position: absolute;
+    top: 56px;
+    left: 32px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--driftwood);
+    letter-spacing: 0.04em;
+    opacity: 0.72;
+  }
+  @media (max-width: 1100px) { .section-num { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <div class="container nav__inner">
+    <a class="nav__brand" href="#top">
+      <img src="assets/logo.png" alt="Novadontics" />
+    </a>
+    <div class="nav__links">
+      <a href="#">Software</a>
+      <a href="#">Customers</a>
+      <a href="#" class="is-active">Pricing</a>
+      <a href="#">Company</a>
+    </div>
+    <div class="nav__cta">
+      <a href="#" class="nav__login">Sign in</a>
+      <a href="#cta" class="btn btn--primary">Schedule a demo</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="container container--narrow">
+    <span class="eyebrow hero__eyebrow">Pricing · 2026</span>
+    <h1 class="display hero__title">Plans designed for <span class="em-i">every</span> practice.</h1>
+    <p class="hero__sub">One platform to run your clinical, front-office, and billing workflows. Every plan is tailored to the way you actually practice — not the other way around.</p>
+    <div class="hero__cta">
+      <a href="#cta" class="btn btn--primary btn--large">Schedule a demo</a>
+      <a href="#plans" class="btn btn--secondary btn--large">See the plans</a>
+    </div>
+    <p class="hero__divider">Trusted by independent practices, multi-location groups, DSOs, and implant specialists.</p>
+  </div>
+</section>
+
+<!-- ============ PRICING CARDS ============ -->
+<section class="pricing" id="plans">
+  <div class="container">
+    <div class="pricing__grid">
+
+      <!-- BASIC -->
+      <div class="plan reveal">
+        <div class="plan__name">Nova Basic</div>
+        <div class="plan__tier">The essentials.</div>
+        <p class="plan__positioning">Run your practice from a single source of truth. Built for solo locations starting fresh.</p>
+        <div class="plan__price">Custom</div>
+        <div class="plan__price-note">Tailored to your workflow</div>
+        <button class="btn btn--secondary plan__cta">Get a quote</button>
+        <ul class="plan__features">
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Unlimited users per office</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>No setup fee</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Appointment book &amp; family file</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Reporting &amp; analytics</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Smart clinical notes</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Implant logbook</li>
+        </ul>
+      </div>
+
+      <!-- PLUS -->
+      <div class="plan reveal">
+        <div class="plan__name">Nova Plus</div>
+        <div class="plan__tier">Insurance &amp; claims, sharpened.</div>
+        <p class="plan__positioning">Add electronic eligibility, claims management, and payment power to the Basic foundation.</p>
+        <div class="plan__price">Custom</div>
+        <div class="plan__price-note">Tailored to your workflow</div>
+        <button class="btn btn--secondary plan__cta">Get a quote</button>
+        <ul class="plan__features">
+          <li class="plan__features-prefix">Everything in Basic, plus</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>eRx prescribing</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Electronic insurance eligibility</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>eClaims management</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Fast Attach unlimited attachments</li>
+        </ul>
+      </div>
+
+      <!-- PRO (FEATURED) -->
+      <div class="plan plan--featured reveal">
+        <span class="plan__pill">Most popular</span>
+        <div class="plan__name">Nova Pro</div>
+        <div class="plan__tier">Engage every patient.</div>
+        <p class="plan__positioning">Paperless intake, automated reminders, and two-way texting on top of full insurance tooling.</p>
+        <div class="plan__price">Custom</div>
+        <div class="plan__price-note">Tailored to your workflow</div>
+        <button class="btn btn--primary plan__cta">Get a quote</button>
+        <ul class="plan__features">
+          <li class="plan__features-prefix">Everything in Plus, plus</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Paperless forms</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Online new patient registration</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Appointment &amp; recall reminders</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Birthday messages</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Two-way texting</li>
+        </ul>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="plan reveal">
+        <div class="plan__name">Nova Premium</div>
+        <div class="plan__tier">The complete clinical suite.</div>
+        <p class="plan__positioning">Adds cloud imaging and the full continuing-education library for high-volume practices and implant specialists.</p>
+        <div class="plan__price">Custom</div>
+        <div class="plan__price-note">Tailored to your workflow</div>
+        <button class="btn btn--secondary plan__cta">Get a quote</button>
+        <ul class="plan__features">
+          <li class="plan__features-prefix">Everything in Pro, plus</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Cloud-based imaging</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Unlimited users &amp; storage</li>
+          <li><span class="plan__check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span>Online CE module — 300+ videos</li>
+        </ul>
+      </div>
+
+    </div>
+    <p class="plan__custom-note">Running multiple locations or a DSO? <a href="#cta">Talk to us about a custom enterprise plan →</a></p>
+  </div>
+</section>
+
+<!-- ============ INCLUDED BAND ============ -->
+<section class="included-band">
+  <div class="container container--narrow">
+    <p class="included-band__title">Everything you need is included. <span class="em-i" style="color:var(--ochre)">No surprise charges.</span></p>
+    <p class="included-band__sub">All plans include unlimited users per office, no setup fee, US-based onboarding &amp; support, and full HIPAA compliance.</p>
+  </div>
+</section>
+
+<!-- ============ COMPARISON TABLE ============ -->
+<section class="section section--paper">
+  <span class="section-num">01 · Compare</span>
+  <div class="container">
+    <div class="compare-head reveal">
+      <span class="eyebrow">Full comparison</span>
+      <h2>Compare <span class="em-i">every</span> feature.</h2>
+      <p>Side-by-side breakdown of what's included at each tier — no fine print.</p>
+    </div>
+
+    <div class="compare-wrap reveal">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th><span class="col-name">Basic</span><span class="col-mini">Foundation</span></th>
+            <th><span class="col-name">Plus</span><span class="col-mini">Insurance</span></th>
+            <th class="col-featured"><span class="col-name">Pro</span><span class="col-mini">Most popular</span></th>
+            <th><span class="col-name">Premium</span><span class="col-mini">Complete</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-row"><td colspan="5">Improve your office operations</td></tr>
+          <tr>
+            <td>Appointment book</td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Family file</td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Reporting &amp; analytics</td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Ledger</td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Smart clinical notes</td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Perio &amp; endo charting</td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Teledentistry</td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Patient bill pay</td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+
+          <tr class="group-row"><td colspan="5">Improve your patient experience</td></tr>
+          <tr>
+            <td>Paperless forms</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="dash">—</span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Online new patient registration</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="dash">—</span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Appointment &amp; recall reminders</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="dash">—</span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Birthday messages</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="dash">—</span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Two-way texting</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="dash">—</span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+
+          <tr class="group-row"><td colspan="5">Collect &amp; track better</td></tr>
+          <tr>
+            <td>eRx prescribing</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Electronic insurance eligibility</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>eClaims management</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Fast Attach — unlimited attachments</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+
+          <tr class="group-row"><td colspan="5">Elevate your implant services</td></tr>
+          <tr>
+            <td>Implant logbook</td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td class="col-featured"><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Cloud-based imaging</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="dash">—</span></td>
+            <td class="col-featured"><span class="dash">—</span></td>
+            <td><span class="check"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l3.5 3.5L13 5"/></svg></span></td>
+          </tr>
+          <tr>
+            <td>Unlimited users &amp; storage</td>
+            <td><span class="cell-text">Per office</span></td>
+            <td><span class="cell-text">Per office</span></td>
+            <td class="col-featured"><span class="cell-text">Per office</span></td>
+            <td><span class="cell-text">Unlimited</span></td>
+          </tr>
+          <tr>
+            <td>Online CE module</td>
+            <td><span class="dash">—</span></td>
+            <td><span class="dash">—</span></td>
+            <td class="col-featured"><span class="dash">—</span></td>
+            <td><span class="cell-text">300+ videos</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INCENTIVE ============ -->
+<section class="section incentive">
+  <span class="section-num" style="color: var(--driftwood)">02 · For new practices</span>
+  <div class="container incentive__inner">
+    <div class="reveal">
+      <span class="eyebrow" style="color: var(--honey)">New practice bonus</span>
+      <h2 class="incentive__title">Open a new practice. Earn <em class="em-i">free months.</em></h2>
+      <p class="incentive__sub">When you outfit a new practice through our Nova Marketplace partners, your spend earns you Novadontics on the house — up to a full year.</p>
+      <a href="#cta" class="btn btn--secondary">See if you qualify</a>
+    </div>
+    <div class="incentive__bonuses reveal">
+      <div class="bonus">
+        <div class="bonus__amount">$50K</div>
+        <p class="bonus__text">Spend with partner vendors and receive <strong>3 months</strong> of Novadontics free.</p>
+      </div>
+      <div class="bonus">
+        <div class="bonus__amount">$100K</div>
+        <p class="bonus__text">Spend with partner vendors and receive <strong>6 months</strong> of Novadontics free.</p>
+      </div>
+      <div class="bonus">
+        <div class="bonus__amount">$150K</div>
+        <p class="bonus__text">Spend with partner vendors and receive <strong>12 months</strong> of Novadontics free.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOCIAL PROOF ============ -->
+<section class="social">
+  <span class="section-num">03 · Trust</span>
+  <div class="container">
+    <p class="eyebrow social__eyebrow">Trusted by modern practices</p>
+    <div class="social__logos reveal">
+      <span>Westlake Dental</span>
+      <span>Ridge Family DDS</span>
+      <span>Coastline Endo</span>
+      <span>Pinecrest Implant Co.</span>
+      <span>Northgate Smile Studio</span>
+      <span>Meridian Oral Health</span>
+    </div>
+    <div class="container--narrow reveal" style="margin-top: 56px">
+      <p class="social__quote">Novadontics replaced four separate tools and gave us back twenty hours a month. The team adapted the platform to how we actually run our day.</p>
+      <p class="social__attribution">Dr. Lena Vasquez · Westlake Dental, multi-location</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="section faq">
+  <span class="section-num">04 · Questions</span>
+  <div class="container">
+    <div class="faq__head reveal">
+      <span class="eyebrow">Common questions</span>
+      <h2>Questions, <span class="em-i">answered.</span></h2>
+    </div>
+    <div class="faq__list">
+      <details class="faq__item reveal">
+        <summary>How is pricing actually determined?</summary>
+        <p>Every practice has a different workflow, patient volume, and specialty mix. We tailor each plan to what you actually need — no padding, no surprise modules, no per-seat creep.</p>
+      </details>
+      <details class="faq__item reveal">
+        <summary>Are there setup fees?</summary>
+        <p>No setup fees on any tier. Onboarding and data migration from your existing platform are included from day one.</p>
+      </details>
+      <details class="faq__item reveal">
+        <summary>How many users does each plan support?</summary>
+        <p>Unlimited users per office on every tier. You'll never pay per seat or have to debate which staff member gets a license this month.</p>
+      </details>
+      <details class="faq__item reveal">
+        <summary>Can I switch plans later?</summary>
+        <p>Yes — upgrade, downgrade, or rebalance at any time. Your tier should match where your practice is today, not where it was a year ago.</p>
+      </details>
+      <details class="faq__item reveal">
+        <summary>Is my patient data HIPAA compliant?</summary>
+        <p>All Novadontics infrastructure is HIPAA compliant, encrypted at rest and in transit, and hosted on US-based servers with continuous audit trails.</p>
+      </details>
+      <details class="faq__item reveal">
+        <summary>Which third-party integrations are supported?</summary>
+        <p>Major imaging vendors, eRx providers, insurance clearinghouses, and payment processors. Custom integrations available for groups and DSOs.</p>
+      </details>
+      <details class="faq__item reveal">
+        <summary>Do you offer training?</summary>
+        <p>Live onboarding sessions, a recorded training library, and ongoing US-based support are included on every plan.</p>
+      </details>
+      <details class="faq__item reveal">
+        <summary>What happens to my existing patient data?</summary>
+        <p>Our migration team handles the move from your current platform end-to-end. You go live with your full patient history intact and verified.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final-cta" id="cta">
+  <div class="container container--narrow">
+    <span class="eyebrow final-cta__eyebrow">Ready when you are</span>
+    <h2 class="final-cta__title">Run your whole practice from <em>one platform.</em></h2>
+    <p class="final-cta__sub">Book a 30-minute demo. We'll show you exactly how Novadontics fits your workflow — and where it pays for itself.</p>
+    <a href="#" class="btn btn--primary btn--large">Schedule a demo</a>
+    <p class="final-cta__note">No credit card. No pressure. Just answers.</p>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo.png" alt="Novadontics" />
+        <p>Cloud-based dental practice management, built around the way modern clinics actually run.</p>
+      </div>
+      <div class="footer__col">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#">Practice management</a></li>
+          <li><a href="#">Patient engagement</a></li>
+          <li><a href="#">Clinical imaging</a></li>
+          <li><a href="#">Implant logbook</a></li>
+          <li><a href="#">Marketplace</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Who it's for</h4>
+        <ul>
+          <li><a href="#">Independent practices</a></li>
+          <li><a href="#">New practices</a></li>
+          <li><a href="#">Groups &amp; DSOs</a></li>
+          <li><a href="#">Mobile services</a></li>
+          <li><a href="#">Specialists</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">Onboarding</a></li>
+          <li><a href="#">Continuing education</a></li>
+          <li><a href="#">Support</a></li>
+          <li><a href="#">Status</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">HIPAA</a></li>
+          <li><a href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Novadontics · HIPAA compliant · US-based support</span>
+      <span>team@novadontics.com · (888) 838-6682</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll state
+  const nav = document.getElementById('nav');
+  let scrolled = false;
+  function onScroll() {
+    const isScrolled = window.scrollY > 24;
+    if (isScrolled !== scrolled) {
+      scrolled = isScrolled;
+      nav.classList.toggle('nav--scrolled', scrolled);
+    }
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Close other FAQs when one opens (accordion behavior)
+  document.querySelectorAll('.faq__item').forEach(item => {
+    item.addEventListener('toggle', (e) => {
+      if (item.open) {
+        document.querySelectorAll('.faq__item').forEach(other => {
+          if (other !== item) other.open = false;
+        });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
