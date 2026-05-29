@@ -338,31 +338,34 @@
     letter-spacing: 0.005em;
     display: inline-block;
   }
-  /* Desktop: logo LEFT, nav links CENTERED, CTAs RIGHT (3-zone layout) */
+  /* Desktop: logo LEFT (flex start), nav links absolutely centered, CTAs RIGHT (flex end) */
   @media screen and (min-width: 992px) {
     .mega-nav__bar-start {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
+      display: flex;
       align-items: center;
+      justify-content: space-between;
       width: 100%;
       gap: 1.5em;
+      position: relative;
     }
     .mega-nav__bar-logo {
-      grid-column: 1;
-      justify-self: start;
+      flex: none;
       margin: 0;
     }
     .mega-nav__bar-inner {
-      display: contents;
+      display: flex;
+      align-items: center;
+      width: auto;
+      margin: 0;
     }
     .mega-nav__bar-list:not(.is--actions) {
-      grid-column: 2;
-      justify-self: center;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
       margin: 0;
     }
     .mega-nav__bar-list.is--actions {
-      grid-column: 3;
-      justify-self: end;
       margin: 0;
       gap: 0.5em;
     }
