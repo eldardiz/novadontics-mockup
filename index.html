@@ -338,7 +338,7 @@
     letter-spacing: 0.005em;
     display: inline-block;
   }
-  /* Desktop: true 3-column grid — logo (left) | nav (true center) | actions (right) */
+  /* Desktop: logo left, links + CTAs centered together as one cluster */
   @media screen and (min-width: 992px) {
     .mega-nav__bar-start {
       display: grid;
@@ -353,18 +353,15 @@
       margin: 0;
     }
     .mega-nav__bar-inner {
-      display: contents;
-    }
-    .mega-nav__bar-list:not(.is--actions) {
       grid-column: 2;
       justify-self: center;
-      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 1.5em;
+      width: auto;
     }
-    .mega-nav__bar-list.is--actions {
-      grid-column: 3;
-      justify-self: end;
-      margin: 0;
-    }
+    .mega-nav__bar-list:not(.is--actions) { margin: 0; }
+    .mega-nav__bar-list.is--actions { margin: 0; gap: 0.5em; }
     .mega-nav__bar-end { display: none; }
   }
   .mega-nav__bar-link-icon { width: 1.25em; height: 1.25em; margin-left: 0.25em; transition: transform 200ms var(--ease); }
